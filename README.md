@@ -1,1 +1,1 @@
-# pollitos-app
+# pollitos
