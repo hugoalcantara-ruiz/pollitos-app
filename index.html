@@ -670,12 +670,12 @@ body{font-family:var(--font-body);background:linear-gradient(135deg,var(--c-crea
     </div>
     <div class="log-section-label">Estado de ánimo</div>
     <div class="chip-row" id="mood-chips">
-      <span class="chip" onclick="toggleChip(this,'mood')">&#128522; Feliz</span>
-      <span class="chip" onclick="toggleChip(this,'mood')">&#128546; Sensible</span>
-      <span class="chip" onclick="toggleChip(this,'mood')">&#128530; Irritable</span>
-      <span class="chip" onclick="toggleChip(this,'mood')">&#128524; Tranquila</span>
-      <span class="chip" onclick="toggleChip(this,'mood')">&#128564; Cansada</span>
-      <span class="chip" onclick="toggleChip(this,'mood')">&#129392; Romántica</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">😊 Feliz</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">😢 Sensible</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">😒 Irritable</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">😌 Tranquila</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">😴 Cansada</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">🥰 Romántica</span>
     </div>
     <div class="log-section-label">Síntomas físicos</div>
     <div class="chip-row" id="physical-chips">
@@ -789,9 +789,9 @@ const state={
   periodLen:5,
   previousPeriods:[null,null,null],
   logs:[
-    {date:new Date(new Date().setDate(new Date().getDate()-2)),flow:'Moderado',moods:['&#128546; Sensible'],physical:['Cólicos'],priv:false},
-    {date:new Date(new Date().setDate(new Date().getDate()-1)),flow:'Ligero',moods:['&#128524; Tranquila'],physical:['Antojos'],priv:false},
-    {date:new Date(),flow:'Ligero',moods:['&#128522; Feliz'],physical:[],priv:true},
+    {date:new Date(new Date().setDate(new Date().getDate()-2)),flow:'Moderado',moods:['&#😢; Sensible'],physical:['Cólicos'],priv:false},
+    {date:new Date(new Date().setDate(new Date().getDate()-1)),flow:'Ligero',moods:['😌 Tranquila'],physical:['Antojos'],priv:false},
+    {date:new Date(),flow:'Ligero',moods:['😊 Feliz'],physical:[],priv:true},
   ],
   selectedFlow:'',
   selectedMoods:[],
@@ -851,8 +851,8 @@ function getCycleDay(){
   return Math.floor(ms/(1000*60*60*24))+1;
 }
 function getPhase(day){
-  if(day<=state.periodLen)return{name:'Menstruación',cls:'menstrual',desc:'Tu cuerpo comienza el ciclo. Es normal sentir fatiga y cólicos leves. Descansa y cuídate.',emoji:'&#128564;'};
-  if(day<=13)return{name:'Fase Folicular',cls:'follicular',desc:'El estrógeno sube. Te sentirás con más energía y creatividad.',emoji:'&#128522;'};
+  if(day<=state.periodLen)return{name:'Menstruación',cls:'menstrual',desc:'Tu cuerpo comienza el ciclo. Es normal sentir fatiga y cólicos leves. Descansa y cuídate.',emoji:'😴'};
+  if(day<=13)return{name:'Fase Folicular',cls:'follicular',desc:'El estrógeno sube. Te sentirás con más energía y creatividad.',emoji:'😊'};
   if(day<=16)return{name:'Ovulación',cls:'ovulation',desc:'Pico de estrógeno y LH. Fertilidad máxima. Te sentirás social y con mucha energía.',emoji:'&#128525;'};
   return{name:'Fase Lútea',cls:'luteal',desc:'La progesterona domina. Puedes sentirte más introspectiva y sensible.',emoji:'&#128532;'};
 }
