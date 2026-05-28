@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FF85A2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pollitos">
+<meta name="application-name" content="Pollitos">
+<link rel="icon" type="image/png" href="pollitos.png">
+<link rel="apple-touch-icon" href="pollitos.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --c-cream:#FFF0F5;--c-warm:#FFE4EC;--c-blush:#FFB6C1;--c-terra:#FF85A2;--c-deep:#8B2240;
+  --c-sage:#FF69B4;--c-sage-light:#FFD1DC;--c-lavender:#DDA0DD;--c-lav-light:#FCE6FA;
+  --c-moon:#F8BBD0;--c-ink:#5C1A2E;--c-muted:#B5657C;--c-border:#F8BBD0;
+  --c-pink-bright:#FF1493;--c-pink-soft:#FFC0CB;--c-yellow-chick:#FFD700;
+  --font-display:'DM Serif Display',serif;--font-body:'DM Sans',sans-serif;
+  --r:14px;--r-sm:8px;--r-full:999px;
+}
+body{font-family:var(--font-body);background:linear-gradient(135deg,var(--c-cream) 0%,#FFF5F8 50%,var(--c-lav-light) 100%);color:var(--c-ink);min-height:100vh;overflow-x:hidden}
+.app{max-width:420px;margin:0 auto;min-height:100vh;position:relative}
+
+/* === LOGIN === */
+#login{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:linear-gradient(135deg,var(--c-cream) 0%,#FFF5F8 50%,var(--c-lav-light) 100%);position:relative;overflow:hidden}
+.login-bg{position:absolute;inset:0;pointer-events:none}
+.login-bg svg{width:100%;height:100%;opacity:.18}
+.login-logo{text-align:center;margin-bottom:2.5rem;position:relative}
+.login-logo .moon-icon{font-size:3rem;color:var(--c-pink-bright);display:block;margin-bottom:.5rem}
+.login-logo h1{font-family:var(--font-display);font-size:2.6rem;color:var(--c-deep);letter-spacing:-.02em;line-height:1}
+.login-logo p{font-size:.85rem;color:var(--c-muted);margin-top:.4rem;letter-spacing:.08em;text-transform:uppercase}
+.login-card{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:2rem;width:100%;max-width:340px;position:relative}
+.login-card h2{font-family:var(--font-display);font-size:1.4rem;margin-bottom:1.5rem;color:var(--c-deep)}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.78rem;font-weight:500;color:var(--c-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem}
+.field input{width:100%;padding:.7rem 1rem;border:1px solid var(--c-border);border-radius:var(--r-sm);font-family:var(--font-body);font-size:.95rem;color:var(--c-ink);background:var(--c-cream);outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--c-pink-bright)}
+.login-btn{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--c-terra) 0%,var(--c-pink-bright) 100%);color:#fff;border:none;border-radius:var(--r-sm);font-family:var(--font-body);font-size:1rem;font-weight:500;cursor:pointer;margin-top:.5rem;transition:opacity .2s;box-shadow:0 4px 15px rgba(255,105,180,.3)}
+.login-btn:active{opacity:.85}
+.login-err{font-size:.82rem;color:#c0392b;margin-top:.75rem;text-align:center;min-height:1.2em}
+.login-hint{font-size:.75rem;color:var(--c-muted);text-align:center;margin-top:1rem;line-height:1.5}
+
+/* === SHELL === */
+.shell{display:none;flex-direction:column;min-height:100vh}
+.shell.active{display:flex}
+.topbar{padding:1rem 1.25rem .75rem;display:flex;align-items:center;justify-content:space-between;background:var(--c-cream);border-bottom:1px solid var(--c-border);position:sticky;top:0;z-index:10}
+.topbar-left{display:flex;align-items:center;gap:.7rem}
+.topbar-title{font-family:var(--font-display);font-size:1.4rem;color:var(--c-deep)}
+.topbar-sub{font-size:.72rem;color:var(--c-muted);letter-spacing:.05em}
+.topbar-right{display:flex;gap:.5rem;align-items:center}
+.icon-btn{background:none;border:1px solid var(--c-border);border-radius:var(--r-sm);padding:.45rem .6rem;cursor:pointer;color:var(--c-muted);font-size:1.1rem;transition:all .2s}
+.icon-btn:hover{background:var(--c-warm);color:var(--c-pink-bright)}
+.content{flex:1;overflow-y:auto;padding:1.25rem}
+.bottom-nav{display:flex;background:#fff;border-top:1px solid var(--c-border);padding:.5rem 0 .8rem}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:.2rem;cursor:pointer;padding:.3rem;color:var(--c-muted);transition:color .2s;font-size:.65rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.nav-item i{font-size:1.3rem}
+.nav-item.active{color:var(--c-pink-bright)}
+.page{display:none}.page.active{display:block}
+
+/* === AVATAR === */
+.avatar-circle{width:40px;height:40px;border-radius:50%;overflow:hidden;cursor:pointer;flex-shrink:0;background:var(--c-warm);border:2px solid var(--c-border);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;color:var(--c-terra);transition:opacity .2s;user-select:none;position:relative}
+.avatar-circle:active{opacity:.75}
+.avatar-circle img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar-circle .avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,.25);opacity:0;transition:opacity .2s;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem}
+.avatar-circle:hover .avatar-overlay{opacity:1}
+
+/* === PHASE BADGE === */
+.phase-banner{border-radius:var(--r);padding:1.25rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.phase-banner.menstrual{background:#FFE4EC;border-left:3px solid #FF85A2}
+.phase-banner.follicular{background:#E8F5E9;border-left:3px solid #FF69B4}
+.phase-banner.ovulation{background:#FCE6FA;border-left:3px solid #DDA0DD}
+.phase-banner.luteal{background:#FFF8E1;border-left:3px solid #FFB74D}
+.phase-label{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+.phase-name{font-family:var(--font-display);font-size:1.5rem;color:var(--c-deep);margin:.2rem 0}
+.phase-desc{font-size:.8rem;color:var(--c-deep);line-height:1.5}
+.phase-day{font-size:.75rem;font-weight:500;color:var(--c-pink-bright);margin-top:.4rem}
+
+/* === CALENDAR === */
+.cal-wrap{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1rem;margin-bottom:1rem}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.cal-header span{font-weight:600;color:var(--c-deep);font-size:.9rem}
+.cal-nav{background:none;border:1px solid var(--c-border);border-radius:var(--r-sm);padding:.3rem .6rem;cursor:pointer;color:var(--c-muted);font-size:.9rem}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-dow{text-align:center;font-size:.65rem;font-weight:600;color:var(--c-muted);letter-spacing:.04em;padding:.3rem 0}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:.8rem;cursor:pointer;transition:all .15s;position:relative;user-select:none}
+.cal-day:hover{background:var(--c-warm)}
+.cal-day.today{font-weight:600;color:var(--c-pink-bright)}
+.cal-day.selected{background:linear-gradient(135deg,var(--c-terra) 0%,var(--c-pink-bright) 100%);color:#fff}
+.cal-day.period{background:#FFB6C1;color:#8B2240}
+.cal-day.ovulation-day{background:#FCE6FA;color:#8B2240}
+.cal-day.predicted{border:1.5px dashed var(--c-pink-bright);color:var(--c-pink-bright)}
+.cal-day.empty{cursor:default}
+.cal-legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--c-border)}
+.legend-item{display:flex;align-items:center;gap:.35rem;font-size:.7rem;color:var(--c-muted)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* === LOG MODAL === */
+.log-sheet{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;opacity:0;transition:opacity .3s}
+.log-sheet.open{pointer-events:all;opacity:1}
+.log-overlay{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.log-panel{background:#fff;border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:420px;position:relative;z-index:1;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto}
+.log-sheet.open .log-panel{transform:translateY(0)}
+.log-handle{width:40px;height:4px;background:var(--c-border);border-radius:99px;margin:0 auto 1.25rem}
+.log-title{font-family:var(--font-display);font-size:1.3rem;margin-bottom:1.25rem;color:var(--c-deep)}
+.chip-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.chip{padding:.4rem .85rem;border-radius:var(--r-full);border:1px solid var(--c-border);font-size:.8rem;cursor:pointer;transition:all .2s;background:var(--c-cream);color:var(--c-ink)}
+.chip.active{background:linear-gradient(135deg,var(--c-terra) 0%,var(--c-pink-bright) 100%);border-color:var(--c-pink-bright);color:#fff}
+.log-section-label{font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--c-muted);margin:.75rem 0 .4rem}
+.flow-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.75rem}
+.flow-btn{padding:.5rem .3rem;text-align:center;border-radius:var(--r-sm);border:1px solid var(--c-border);font-size:.75rem;cursor:pointer;background:var(--c-cream);transition:all .2s}
+.flow-btn.active{background:linear-gradient(135deg,var(--c-terra) 0%,var(--c-pink-bright) 100%);border-color:var(--c-pink-bright);color:#fff}
+.privacy-row{display:flex;align-items:center;justify-content:space-between;background:var(--c-lav-light);border-radius:var(--r-sm);padding:.7rem 1rem;margin:1rem 0}
+.privacy-row span{font-size:.82rem;color:var(--c-deep)}
+.toggle{position:relative;width:42px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--c-border);border-radius:99px;cursor:pointer;transition:background .2s}
+.toggle-slider:before{content:'';position:absolute;width:18px;height:18px;top:3px;left:3px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle input:checked+.toggle-slider{background:var(--c-pink-bright)}
+.toggle input:checked+.toggle-slider:before{transform:translateX(18px)}
+.save-btn{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--c-deep) 0%,#C2185B 100%);color:#fff;border:none;border-radius:var(--r-sm);font-family:var(--font-body);font-size:.95rem;font-weight:500;cursor:pointer;margin-top:.75rem}
+
+/* === STATS CARDS === */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem}
+.stat-card{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1rem;text-align:center}
+.stat-card .stat-n{font-family:var(--font-display);font-size:2rem;background:linear-gradient(135deg,var(--c-deep) 0%,var(--c-pink-bright) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.stat-card .stat-l{font-size:.72rem;color:var(--c-muted);letter-spacing:.05em;text-transform:uppercase;margin-top:.3rem}
+
+/* === SECTION HEADERS === */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;margin-top:1.25rem}
+.sec-hd h3{font-size:.8rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--c-deep)}
+.sec-hd a{font-size:.75rem;color:var(--c-pink-bright);cursor:pointer}
+
+/* === SYMPTOM LOG LIST === */
+.log-list{display:flex;flex-direction:column;gap:.5rem}
+.log-item{background:#fff;border:1px solid var(--c-border);border-radius:var(--r-sm);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;position:relative}
+.log-item-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.log-item-icon.mood{background:var(--c-lav-light);color:var(--c-lavender)}
+.log-item-icon.physical{background:#FFE4EC;color:var(--c-terra)}
+.log-item-icon.private{background:#FCE6FA;color:#FF1493}
+.log-item-text{flex:1;min-width:0}
+.log-item-text strong{font-size:.85rem;font-weight:500;display:block;color:var(--c-deep)}
+.log-item-text span{font-size:.75rem;color:var(--c-muted)}
+.private-badge{font-size:.65rem;background:#FCE6FA;color:#FF1493;padding:.2rem .5rem;border-radius:99px;font-weight:500;flex-shrink:0}
+
+/* === EDIT LOG === */
+.log-edit-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--c-border);background:var(--c-cream);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--c-muted);font-size:.8rem;transition:all .2s;flex-shrink:0;margin-left:.25rem}
+.log-edit-btn:hover{background:var(--c-warm);color:var(--c-terra)}
+.log-edited-tag{font-size:.65rem;color:var(--c-muted);font-style:italic;margin-left:.3rem}
+
+/* === DON POLLO INTERFACE === */
+.countdown-card{background:linear-gradient(135deg,#8B2240 0%,#C2185B 50%,#FF1493 100%);border-radius:var(--r);padding:1.5rem;color:#fff;margin-bottom:1rem;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(255,105,180,.25)}
+.countdown-card::before{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.04);top:-60px;right:-40px}
+.countdown-num{font-family:var(--font-display);font-size:4.5rem;line-height:1;margin:.5rem 0;text-shadow:0 2px 10px rgba(255,105,180,.3)}
+.countdown-label{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+.countdown-msg{font-size:.88rem;opacity:.8;margin-top:.5rem;font-style:italic}
+
+.hormone-track{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1.1rem;margin-bottom:1rem}
+.hormone-bar-wrap{margin-top:.75rem}
+.hormone-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
+.hormone-name{font-size:.75rem;color:var(--c-muted);width:80px;flex-shrink:0}
+.hormone-track-bar{flex:1;height:6px;background:var(--c-border);border-radius:99px;overflow:hidden}
+.hormone-fill{height:100%;border-radius:99px;transition:width .8s ease}
+
+.notif-list{display:flex;flex-direction:column;gap:.6rem}
+.notif-card{border-radius:var(--r-sm);padding:.85rem 1rem;display:flex;gap:.75rem;align-items:flex-start}
+.notif-card.tip{background:#FFF8E1;border-left:3px solid #FFB74D}
+.notif-card.alert{background:#FFE4EC;border-left:3px solid #FF85A2}
+.notif-card.good{background:#FCE6FA;border-left:3px solid #DDA0DD}
+.notif-card i{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+.notif-card.tip i{color:#FFB74D}
+.notif-card.alert i{color:#FF85A2}
+.notif-card.good i{color:#DDA0DD}
+.notif-card p{font-size:.82rem;color:var(--c-deep);line-height:1.45}
+.notif-card strong{font-weight:600}
+
+.reaction-bar{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1.1rem;margin-top:1rem}
+.reaction-bar h4{font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--c-muted);margin-bottom:.75rem}
+.reaction-btns{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.reaction-btn{padding:.7rem .5rem;border-radius:var(--r-sm);border:1px solid var(--c-border);background:var(--c-cream);font-family:var(--font-body);font-size:.82rem;cursor:pointer;text-align:center;transition:all .2s;color:var(--c-deep);line-height:1.3}
+.reaction-btn:active{transform:scale(.97)}
+.reaction-btn.sent{background:var(--c-lav-light);border-color:var(--c-lavender);color:#8B2240}
+
+.live-pulse{display:inline-flex;align-items:center;gap:.35rem;background:#FCE6FA;padding:.3rem .7rem;border-radius:99px;font-size:.72rem;font-weight:500;color:#FF1493;margin-bottom:1rem}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:#FF1493;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+/* === LEARN PAGE === */
+.learn-item{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;margin-bottom:.75rem}
+.learn-header{padding:1rem;display:flex;align-items:center;gap:.75rem;cursor:pointer}
+.learn-phase-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.learn-title{font-size:.92rem;font-weight:500;color:var(--c-deep);flex:1}
+.learn-body{padding:0 1rem 1rem;font-size:.82rem;color:var(--c-muted);line-height:1.65;display:none}
+.learn-body.open{display:block}
+.learn-tip{background:var(--c-warm);border-radius:var(--r-sm);padding:.7rem .9rem;margin-top:.75rem;font-size:.8rem;color:var(--c-deep)}
+.learn-tip strong{color:var(--c-pink-bright)}
+
+/* === LEARN SUB-TABS === */
+.learn-subtabs{display:flex;background:var(--c-cream);border-radius:var(--r-sm);padding:3px;border:1px solid var(--c-border);margin-bottom:1.25rem;gap:3px}
+.learn-subtab{flex:1;padding:.5rem .3rem;text-align:center;font-size:.8rem;font-weight:500;cursor:pointer;border-radius:calc(var(--r-sm) - 2px);transition:all .2s;color:var(--c-muted)}
+.learn-subtab.active{background:#fff;color:var(--c-deep);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.learn-subpage{display:none}
+.learn-subpage.active{display:block}
+
+/* === COMPATIBILITY SECTION === */
+.compat-card{background:linear-gradient(135deg,var(--c-lav-light) 0%,#FFE4EC 100%);border:1px solid var(--c-lavender);border-radius:var(--r);padding:1.25rem;margin-bottom:.75rem}
+.compat-signs{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:1rem}
+.compat-sign{display:flex;flex-direction:column;align-items:center;gap:.25rem}
+.compat-symbol{font-size:2.5rem;line-height:1}
+.compat-name{font-size:.85rem;font-weight:600;color:var(--c-deep)}
+.compat-date{font-size:.7rem;color:var(--c-muted)}
+.compat-plus{font-size:1.5rem;color:var(--c-lavender);font-weight:300}
+.compat-score{text-align:center;margin-bottom:1rem}
+.compat-score-num{font-family:var(--font-display);font-size:2.5rem;background:linear-gradient(135deg,var(--c-deep) 0%,var(--c-pink-bright) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.compat-score-lbl{font-size:.72rem;color:var(--c-muted);letter-spacing:.05em;text-transform:uppercase}
+.compat-bar{height:8px;background:rgba(255,255,255,.5);border-radius:99px;overflow:hidden;margin:.5rem 0}
+.compat-bar-fill{height:100%;background:linear-gradient(90deg,var(--c-lavender),var(--c-pink-bright));border-radius:99px;transition:width 1s ease}
+.compat-item{background:#fff;border:1px solid var(--c-border);border-radius:var(--r-sm);padding:.85rem 1rem;margin-bottom:.5rem}
+.compat-item strong{font-size:.85rem;color:var(--c-deep);display:block;margin-bottom:.2rem}
+.compat-item span{font-size:.8rem;color:var(--c-muted);line-height:1.5}
+
+/* === CÓDIGO DE HONOR === */
+.honor-item{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;margin-bottom:.75rem}
+.honor-header{padding:1rem;display:flex;align-items:center;gap:.75rem;cursor:pointer}
+.honor-icon{width:36px;height:36px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.honor-title{font-size:.92rem;font-weight:500;color:var(--c-deep);flex:1}
+.honor-body{padding:0 1rem 1rem;font-size:.82rem;color:var(--c-muted);line-height:1.65;display:none}
+.honor-body.open{display:block}
+.honor-tip{background:var(--c-warm);border-radius:var(--r-sm);padding:.7rem .9rem;margin-top:.75rem;font-size:.8rem;color:var(--c-deep)}
+.honor-tip strong{color:var(--c-pink-bright)}
+.honor-pill{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:600;padding:.25rem .6rem;border-radius:99px;margin:.3rem .2rem .3rem 0}
+
+/* === INSIGHTS === */
+.insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.insight-card{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1rem}
+.insight-card .big{font-family:var(--font-display);font-size:1.8rem;background:linear-gradient(135deg,var(--c-deep) 0%,var(--c-pink-bright) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.insight-card .lbl{font-size:.7rem;color:var(--c-muted);letter-spacing:.05em;text-transform:uppercase;margin-top:.3rem}
+
+/* === AJUSTES Y PRIVACIDAD === */
+.priv-card{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1.25rem;margin-bottom:.75rem}
+.priv-row{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--c-border)}
+.priv-row:last-child{border-bottom:none}
+.priv-row-left strong{font-size:.87rem;color:var(--c-deep);display:block;font-weight:500}
+.priv-row-left span{font-size:.75rem;color:var(--c-muted)}
+
+/* === CYCLE SETTINGS FORM === */
+.cycle-settings-form{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1rem}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.setting-row label{font-size:.85rem;color:var(--c-deep);font-weight:500;flex:1;line-height:1.3}
+.setting-row small{font-size:.72rem;color:var(--c-muted);display:block;margin-top:.1rem}
+.setting-input{width:120px;padding:.55rem .75rem;border:1.5px solid var(--c-border);border-radius:var(--r-sm);font-family:var(--font-body);font-size:.88rem;color:var(--c-ink);background:var(--c-cream);outline:none;text-align:center;transition:border-color .2s;flex-shrink:0}
+.setting-input:focus{border-color:var(--c-pink-bright)}
+.save-settings-btn{width:100%;padding:.75rem;background:linear-gradient(135deg,var(--c-terra) 0%,var(--c-pink-bright) 100%);color:#fff;border:none;border-radius:var(--r-sm);font-family:var(--font-body);font-size:.9rem;font-weight:500;cursor:pointer;transition:opacity .2s;margin-top:.25rem;box-shadow:0 4px 15px rgba(255,105,180,.2)}
+.save-settings-btn:active{opacity:.85}
+
+/* === PREVIOUS PERIODS === */
+.prev-periods-list{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.prev-period-row{display:flex;align-items:center;gap:.5rem}
+.prev-period-row label{font-size:.8rem;color:var(--c-deep);font-weight:500;width:90px;flex-shrink:0}
+.prev-period-row input{flex:1;padding:.55rem .75rem;border:1.5px solid var(--c-border);border-radius:var(--r-sm);font-family:var(--font-body);font-size:.88rem;color:var(--c-ink);background:var(--c-cream);outline:none}
+.prev-period-row input:focus{border-color:var(--c-terra)}
+.prev-periods-note{font-size:.75rem;color:var(--c-muted);line-height:1.5;margin-top:.5rem;padding:.5rem;background:var(--c-warm);border-radius:var(--r-sm)}
+
+/* === ACCOUNT SETTINGS === */
+.account-form{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1rem}
+.account-form .field{margin-bottom:0}
+
+/* === DON POLLO DETAIL FORM === */
+.detail-form{background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1rem;margin-bottom:1rem}
+.detail-form textarea{width:100%;padding:.75rem 1rem;border:1.5px solid var(--c-border);border-radius:var(--r-sm);font-family:var(--font-body);font-size:.9rem;color:var(--c-ink);background:var(--c-cream);outline:none;resize:vertical;min-height:80px;transition:border-color .2s}
+.detail-form textarea:focus{border-color:var(--c-terra)}
+.detail-send-btn{width:100%;padding:.75rem;background:linear-gradient(135deg,var(--c-terra) 0%,var(--c-pink-bright) 100%);color:#fff;border:none;border-radius:var(--r-sm);font-family:var(--font-body);font-size:.9rem;font-weight:500;cursor:pointer;margin-top:.5rem;transition:opacity .2s}
+.detail-send-btn:active{opacity:.85}
+.sent-detail-card{background:#fff;border:1px solid var(--c-border);border-radius:var(--r-sm);padding:.85rem 1rem;margin-bottom:.5rem;display:flex;align-items:flex-start;gap:.75rem}
+.sent-detail-card .icon{width:36px;height:36px;background:var(--c-lav-light);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--c-lavender);font-size:1rem}
+.sent-detail-card .text{flex:1}
+.sent-detail-card .text strong{font-size:.85rem;color:var(--c-deep);display:block;margin-bottom:.2rem}
+.sent-detail-card .text p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+.sent-detail-card .time{font-size:.7rem;color:var(--c-muted);flex-shrink:0}
+
+/* === PRINCESA RECEIVED DETAILS === */
+.received-detail-card{background:linear-gradient(135deg,var(--c-lav-light) 0%,#fff 100%);border:1px solid var(--c-lavender);border-radius:var(--r-sm);padding:.85rem 1rem;margin-bottom:.5rem;display:flex;align-items:flex-start;gap:.75rem}
+.received-detail-card .icon{width:36px;height:36px;background:var(--c-lav-light);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--c-lavender);font-size:1rem}
+.received-detail-card .text{flex:1}
+.received-detail-card .text strong{font-size:.85rem;color:var(--c-deep);display:block;margin-bottom:.2rem}
+.received-detail-card .text p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+.received-detail-card .time{font-size:.7rem;color:var(--c-muted);flex-shrink:0}
+
+/* === HOROSCOPE MODAL === */
+.horoscope-sheet{position:fixed;inset:0;z-index:150;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;opacity:0;transition:opacity .3s}
+.horoscope-sheet.open{pointer-events:all;opacity:1}
+.horoscope-overlay{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+.horoscope-panel{background:#fff;border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:420px;position:relative;z-index:1;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto}
+.horoscope-sheet.open .horoscope-panel{transform:translateY(0)}
+.zodiac-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:1rem}
+.zodiac-btn{padding:.6rem .3rem;border-radius:var(--r-sm);border:1.5px solid var(--c-border);background:var(--c-cream);cursor:pointer;text-align:center;transition:all .2s;font-size:.72rem;color:var(--c-deep);line-height:1.3;font-family:var(--font-body)}
+.zodiac-btn .z-symbol{font-size:1.4rem;display:block;margin-bottom:.2rem;line-height:1}
+.zodiac-btn.selected{background:var(--c-lav-light);border-color:var(--c-lavender);color:#FF1493;font-weight:600}
+.zodiac-btn:hover:not(.selected){background:var(--c-warm)}
+.horoscope-result{background:linear-gradient(135deg,var(--c-lav-light) 0%,#FFE4EC 100%);border-radius:var(--r);padding:1.25rem;margin-top:1rem;display:none;border:1px solid var(--c-lavender)}
+.horoscope-result.visible{display:block}
+.horoscope-category{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#FF1493;margin-bottom:.4rem;display:flex;align-items:center;gap:.35rem}
+.horoscope-text{font-size:.88rem;color:var(--c-deep);line-height:1.65}
+.horoscope-sign-display{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;background:var(--c-warm);border-radius:var(--r-sm);padding:.75rem 1rem}
+.horoscope-sign-symbol{font-size:2rem;line-height:1}
+.horoscope-sign-info strong{font-size:.95rem;color:var(--c-deep);display:block}
+.horoscope-sign-info span{font-size:.75rem;color:var(--c-muted)}
+
+/* === DETAIL VIRTUAL === */
+.detail-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--c-deep);color:#fff;padding:.75rem 1.25rem;border-radius:var(--r-full);font-size:.85rem;font-weight:500;opacity:0;transition:all .4s;pointer-events:none;white-space:nowrap;z-index:200}
+.detail-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-bg">
+    <svg viewBox="0 0 400 800" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="330" cy="100" r="180" fill="#C4785A" opacity=".15"/>
+      <circle cx="80" cy="600" r="140" fill="#B8A8D4" opacity=".15"/>
+      <circle cx="200" cy="350" r="80" fill="#8BA888" opacity=".1"/>
+    </svg>
+  </div>
+  <div class="login-logo">
+    <img src="pollitos.png" alt="Pollitos" style="width:90px;height:90px;border-radius:24px;margin-bottom:1rem;box-shadow:0 8px 32px rgba(255,105,180,.3)">
+    <h1>Pollitos</h1>
+    <p>Ciclo compartido, amor sincronizado</p>
+  </div>
+  <div class="login-card">
+    <h2>Bienvenida/o</h2>
+    <div class="field">
+      <label>Usuario</label>
+      <input type="text" id="uname" placeholder="Tu nombre de usuario" autocomplete="off" autocapitalize="none">
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" id="pass" placeholder="Contraseña">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Entrar a Pollitos</button>
+    <p class="login-err" id="lerr"></p>
+    <p class="login-hint">Espacio privado para dos</p>
+  </div>
+</div>
+
+<!-- INPUT OCULTO PARA AVATARES -->
+<input type="file" accept="image/*" id="avatar-file-princesa" style="display:none" onchange="handleAvatarUpload(event,'princesa')">
+<input type="file" accept="image/*" id="avatar-file-pollo" style="display:none" onchange="handleAvatarUpload(event,'pollo')">
+
+<!-- SHELL: PRINCESA -->
+<div class="shell" id="shell-princesa">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="avatar-circle" id="avatar-display-princesa" onclick="document.getElementById('avatar-file-princesa').click()" title="Cambiar foto">
+        <span id="avatar-placeholder-princesa">P</span>
+        <div class="avatar-overlay"><i class="ti ti-camera" style="font-size:.9rem"></i></div>
+      </div>
+      <div>
+        <div class="topbar-title">Hola, Princesa <span style="font-style:italic;font-size:1rem">&#10022;</span></div>
+        <div class="topbar-sub" id="princesa-date-sub"></div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" onclick="openHoroscope()" title="Horóscopo del día"><i class="ti ti-stars"></i></button>
+      <button class="icon-btn" onclick="openLog()" title="Registrar hoy"><i class="ti ti-plus"></i></button>
+      <button class="icon-btn" onclick="logout()" title="Salir"><i class="ti ti-logout"></i></button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- HOME -->
+    <div class="page active" id="pg-home">
+      <div id="phase-banner" class="phase-banner menstrual">
+        <div class="phase-label">Fase actual</div>
+        <div class="phase-name" id="phase-name-text">Menstruación</div>
+        <div class="phase-desc" id="phase-desc-text">Tu cuerpo comienza el ciclo. Es normal sentir fatiga y cólicos.</div>
+        <div class="phase-day" id="phase-day-text">Día 1 del ciclo</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-n" id="stat-cycle">28</div><div class="stat-l">Días ciclo</div></div>
+        <div class="stat-card"><div class="stat-n" id="stat-next">14</div><div class="stat-l">Para próximo periodo</div></div>
+      </div>
+      <div class="sec-hd"><h3>Calendario</h3></div>
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="changeMonth(-1)">&#8249;</button>
+          <span id="cal-month-label"></span>
+          <button class="cal-nav" onclick="changeMonth(1)">&#8250;</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#F5C4B3"></div>Periodo</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#EDE8F5"></div>Ovulación</div>
+          <div class="legend-item"><div class="legend-dot" style="border:1.5px dashed var(--c-terra)"></div>Predicción</div>
+        </div>
+      </div>
+      <div class="sec-hd"><h3>Registros recientes</h3><a onclick="openLog()">+ Agregar</a></div>
+      <div class="log-list" id="log-list"></div>
+      <!-- SECCION: Detalles recibidos de Don Pollo -->
+      <div class="sec-hd" style="margin-top:1.5rem"><h3><i class="ti ti-heart" style="color:var(--c-terra);margin-right:.3rem"></i>Detalles de Don Pollo</h3></div>
+      <div id="received-details-list"></div>
+    </div>
+    <!-- INSIGHTS -->
+    <div class="page" id="pg-insights">
+      <div style="margin-bottom:1rem">
+        <div style="font-family:var(--font-display);font-size:1.6rem;color:var(--c-deep);margin-bottom:.3rem">Tus patrones</div>
+        <div style="font-size:.82rem;color:var(--c-muted)">Últimos 3 ciclos analizados</div>
+      </div>
+      <div class="insight-grid" style="margin-bottom:1rem">
+        <div class="insight-card"><div class="big" id="insight-cycle-avg">28</div><div class="lbl">Ciclo promedio</div></div>
+        <div class="insight-card"><div class="big" id="insight-period-avg">5</div><div class="lbl">Días de periodo</div></div>
+        <div class="insight-card"><div class="big">14</div><div class="lbl">Día de ovulación</div></div>
+        <div class="insight-card"><div class="big" id="insight-accuracy">72%</div><div class="lbl">Predicción exacta</div></div>
+      </div>
+      <div class="sec-hd"><h3>Gráfico de ciclos</h3></div>
+      <div style="background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1rem;margin-bottom:1rem">
+        <div id="cycle-chart" style="min-height:150px"></div>
+      </div>
+      <div class="sec-hd"><h3>Síntomas frecuentes</h3></div>
+      <div style="background:#fff;border:1px solid var(--c-border);border-radius:var(--r);padding:1rem;margin-bottom:1rem">
+        <div id="symptom-bars"></div>
+      </div>
+      <div class="phase-banner folicular" style="margin-top:1rem">
+        <div class="phase-label">Próxima semana</div>
+        <div class="phase-name" style="font-size:1.1rem">Fase Folicular</div>
+        <div class="phase-desc">Energía en aumento. Buen momento para actividades nuevas.</div>
+      </div>
+    </div>
+    <!-- AJUSTES Y PRIVACIDAD -->
+    <div class="page" id="pg-privacy">
+      <div style="margin-bottom:1.25rem">
+        <div style="font-family:var(--font-display);font-size:1.6rem;color:var(--c-deep);margin-bottom:.3rem">Ajustes y Privacidad</div>
+        <div style="font-size:.82rem;color:var(--c-muted)">Configura tu ciclo, tu cuenta y controla qué ve tu pareja</div>
+      </div>
+
+      <!-- BLOQUE: Configuración del ciclo -->
+      <div class="priv-card" style="margin-bottom:.75rem">
+        <div style="font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--c-muted);margin-bottom:.9rem">Configuración del ciclo</div>
+        <div class="cycle-settings-form">
+          <div class="setting-row">
+            <div>
+              <label for="input-cycle-start" style="font-size:.85rem;color:var(--c-deep);font-weight:500;display:block">Inicio del último periodo</label>
+              <small style="font-size:.72rem;color:var(--c-muted)">Fecha en que comenzó</small>
+            </div>
+            <input type="date" id="input-cycle-start" class="setting-input">
+          </div>
+          <div class="setting-row">
+            <div>
+              <label for="input-cycle-len" style="font-size:.85rem;color:var(--c-deep);font-weight:500;display:block">Duración del ciclo</label>
+              <small style="font-size:.72rem;color:var(--c-muted)">Días totales (ej. 28)</small>
+            </div>
+            <input type="number" id="input-cycle-len" class="setting-input" min="21" max="45" placeholder="28">
+          </div>
+          <div class="setting-row">
+            <div>
+              <label for="input-period-len" style="font-size:.85rem;color:var(--c-deep);font-weight:500;display:block">Duración del periodo</label>
+              <small style="font-size:.72rem;color:var(--c-muted)">Días de sangrado (ej. 5)</small>
+            </div>
+            <input type="number" id="input-period-len" class="setting-input" min="2" max="10" placeholder="5">
+          </div>
+        </div>
+        <!-- 3 PERIODOS ANTERIORES -->
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--c-border)">
+          <div style="font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--c-muted);margin-bottom:.75rem">Tus 3 periodos anteriores</div>
+          <div class="prev-periods-note">Agrega la fecha de inicio, duración del ciclo y duración del periodo para cada uno. Esto alimenta tu gráfico de patrones.</div>
+          <div class="prev-periods-list" style="margin-top:.75rem" id="prev-periods-container">
+            <!-- Periodo 1 -->
+            <div style="background:var(--c-cream);border-radius:var(--r);padding:.75rem;margin-bottom:.5rem;border:1px solid var(--c-border)">
+              <div style="font-size:.75rem;font-weight:600;color:var(--c-deep);margin-bottom:.4rem">&#128197; Periodo anterior 1</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem">
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Inicio</label><input type="date" id="prev-period-1" class="setting-input" style="width:100%;text-align:left;font-size:.78rem"></div>
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Ciclo (días)</label><input type="number" id="prev-cycle-1" class="setting-input" style="width:100%;text-align:center;font-size:.78rem" min="21" max="45" placeholder="28"></div>
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Periodo (días)</label><input type="number" id="prev-duration-1" class="setting-input" style="width:100%;text-align:center;font-size:.78rem" min="2" max="10" placeholder="5"></div>
+              </div>
+            </div>
+            <!-- Periodo 2 -->
+            <div style="background:var(--c-cream);border-radius:var(--r);padding:.75rem;margin-bottom:.5rem;border:1px solid var(--c-border)">
+              <div style="font-size:.75rem;font-weight:600;color:var(--c-deep);margin-bottom:.4rem">&#128197; Periodo anterior 2</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem">
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Inicio</label><input type="date" id="prev-period-2" class="setting-input" style="width:100%;text-align:left;font-size:.78rem"></div>
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Ciclo (días)</label><input type="number" id="prev-cycle-2" class="setting-input" style="width:100%;text-align:center;font-size:.78rem" min="21" max="45" placeholder="28"></div>
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Periodo (días)</label><input type="number" id="prev-duration-2" class="setting-input" style="width:100%;text-align:center;font-size:.78rem" min="2" max="10" placeholder="5"></div>
+              </div>
+            </div>
+            <!-- Periodo 3 -->
+            <div style="background:var(--c-cream);border-radius:var(--r);padding:.75rem;margin-bottom:.5rem;border:1px solid var(--c-border)">
+              <div style="font-size:.75rem;font-weight:600;color:var(--c-deep);margin-bottom:.4rem">&#128197; Periodo anterior 3</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem">
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Inicio</label><input type="date" id="prev-period-3" class="setting-input" style="width:100%;text-align:left;font-size:.78rem"></div>
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Ciclo (días)</label><input type="number" id="prev-cycle-3" class="setting-input" style="width:100%;text-align:center;font-size:.78rem" min="21" max="45" placeholder="28"></div>
+                <div><label style="font-size:.68rem;color:var(--c-muted)">Periodo (días)</label><input type="number" id="prev-duration-3" class="setting-input" style="width:100%;text-align:center;font-size:.78rem" min="2" max="10" placeholder="5"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="save-settings-btn" onclick="saveCycleSettings()">
+          <i class="ti ti-device-floppy" style="vertical-align:-2px;margin-right:.4rem"></i>Guardar configuración
+        </button>
+      </div>
+
+      <!-- BLOQUE: Mi cuenta -->
+      <div class="priv-card" style="margin-bottom:.75rem">
+        <div style="font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--c-muted);margin-bottom:.9rem">Mi cuenta</div>
+        <div class="account-form">
+          <div class="field">
+            <label>Nombre de usuario</label>
+            <input type="text" id="account-username" placeholder="Tu nombre de usuario" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Contraseña</label>
+            <input type="password" id="account-password" placeholder="Nueva contraseña">
+            <small style="font-size:.72rem;color:var(--c-muted)">Déjalo en blanco para mantener la actual</small>
+          </div>
+        </div>
+        <button class="save-settings-btn" onclick="saveAccountSettings()">
+          <i class="ti ti-user-check" style="vertical-align:-2px;margin-right:.4rem"></i>Guardar cambios
+        </button>
+      </div>
+
+      <!-- BLOQUE: Privacidad -->
+      <div class="priv-card">
+        <div style="font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--c-muted);margin-bottom:.75rem">Datos del ciclo</div>
+        <div class="priv-row"><div class="priv-row-left"><strong>Fecha de periodo</strong><span>Inicio y fin del ciclo</span></div><label class="toggle"><input type="checkbox" checked onchange="updatePrivacy(this,'periodo')"><span class="toggle-slider"></span></label></div>
+        <div class="priv-row"><div class="priv-row-left"><strong>Fase hormonal</strong><span>En qué fase estás</span></div><label class="toggle"><input type="checkbox" checked onchange="updatePrivacy(this,'fase')"><span class="toggle-slider"></span></label></div>
+        <div class="priv-row"><div class="priv-row-left"><strong>Estado de ánimo</strong><span>Cómo te sientes hoy</span></div><label class="toggle"><input type="checkbox" checked onchange="updatePrivacy(this,'animo')"><span class="toggle-slider"></span></label></div>
+        <div class="priv-row"><div class="priv-row-left"><strong>Síntomas físicos</strong><span>Cólicos, acné, etc.</span></div><label class="toggle"><input type="checkbox" onchange="updatePrivacy(this,'sintomas')"><span class="toggle-slider"></span></label></div>
+        <div class="priv-row"><div class="priv-row-left"><strong>Notas personales</strong><span>Texto libre</span></div><label class="toggle"><input type="checkbox" onchange="updatePrivacy(this,'notas')"><span class="toggle-slider"></span></label></div>
+        <div class="priv-row"><div class="priv-row-left"><strong>Antojos</strong><span>Lo que quieres comer</span></div><label class="toggle"><input type="checkbox" checked onchange="updatePrivacy(this,'antojos')"><span class="toggle-slider"></span></label></div>
+      </div>
+      <div style="background:var(--c-lav-light);border-radius:var(--r-sm);padding:.8rem 1rem;font-size:.8rem;color:var(--c-deep);line-height:1.5;margin-top:.75rem">
+        <i class="ti ti-lock" style="color:var(--c-lavender);vertical-align:-2px;margin-right:.4rem"></i>
+        Lo que actives en <strong>verde</strong> será visible para tu pareja. Lo que desactives es solo tuyo.
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchPage('home',this)"><i class="ti ti-home"></i>Inicio</div>
+    <div class="nav-item" onclick="switchPage('insights',this)"><i class="ti ti-chart-line"></i>Patrones</div>
+    <div class="nav-item" onclick="switchPage('privacy',this)"><i class="ti ti-settings"></i>Ajustes</div>
+  </div>
+</div>
+
+<!-- SHELL: DON POLLO -->
+<div class="shell" id="shell-pollo">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="avatar-circle" id="avatar-display-pollo" onclick="document.getElementById('avatar-file-pollo').click()" title="Cambiar foto">
+        <span id="avatar-placeholder-pollo">D</span>
+        <div class="avatar-overlay"><i class="ti ti-camera" style="font-size:.9rem"></i></div>
+      </div>
+      <div>
+        <div class="topbar-title">Hola, Don Pollo <span style="font-style:italic;font-size:1rem">&#9825;</span></div>
+        <div class="topbar-sub" id="pollo-date-sub"></div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" onclick="openHoroscope()" title="Horóscopo del día"><i class="ti ti-stars"></i></button>
+      <button class="icon-btn" onclick="logout()" title="Salir"><i class="ti ti-logout"></i></button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- HOME POLLO -->
+    <div class="page active" id="pg-pollo-home">
+      <div class="live-pulse"><span class="pulse-dot"></span>Sincronizado en vivo</div>
+      <div class="countdown-card">
+        <div class="countdown-label">Próximo periodo de ella</div>
+        <div class="countdown-num" id="pollo-countdown">14</div>
+        <div style="font-size:.85rem;opacity:.7">días</div>
+        <div class="countdown-msg" id="pollo-msg">Buen momento para planear algo especial juntos</div>
+      </div>
+      <div class="hormone-track">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:.8rem;font-weight:500;color:var(--c-deep)">Niveles hormonales de ella</span>
+          <span id="pollo-phase-badge" style="font-size:.72rem;background:var(--c-lav-light);color:#534AB7;padding:.2rem .6rem;border-radius:99px;font-weight:500">Fase lútea</span>
+        </div>
+        <div class="hormone-bar-wrap" id="hormone-bars"></div>
+      </div>
+      <div class="sec-hd"><h3>Notificaciones proactivas</h3></div>
+      <div class="notif-list" id="notif-list"></div>
+      <div class="reaction-bar" id="reaction-bar" style="display:none">
+        <h4>Ella registró ahora mismo…</h4>
+        <div style="font-size:.82rem;color:var(--c-muted);margin-bottom:.75rem" id="reaction-what"></div>
+        <div class="reaction-btns" id="reaction-btns"></div>
+      </div>
+      <!-- SEMAFORO DE ENERGIA Y BATERIA SOCIAL -->
+      <div class="sec-hd" style="margin-top:1.25rem"><h3>&#128161; Nivel de Energía y Batería Social</h3></div>
+      <div class="hormone-track" style="margin-top:.5rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+          <span style="font-size:.8rem;font-weight:500;color:var(--c-deep)">Cómo se siente ella hoy</span>
+          <span id="energy-badge" style="font-size:.72rem;background:#E8F5E9;color:#2E7D32;padding:.2rem .6rem;border-radius:99px;font-weight:500">Cargada</span>
+        </div>
+        <div id="energy-bars" style="margin-top:.75rem"></div>
+        <div style="margin-top:.75rem;padding:.5rem;background:var(--c-cream);border-radius:var(--r-sm);font-size:.75rem;color:var(--c-muted);line-height:1.5" id="energy-advice">
+          Basado en los síntomas y estado de ánimo que ella registró hoy.
+        </div>
+      </div>
+    </div>
+    <!-- APRENDE -->
+    <div class="page" id="pg-pollo-learn">
+      <div style="margin-bottom:1rem">
+        <div style="font-family:var(--font-display);font-size:1.6rem;color:var(--c-deep);margin-bottom:.3rem">Aprende &amp; Crece</div>
+        <div style="font-size:.82rem;color:var(--c-muted)">Herramientas para conectar mejor</div>
+      </div>
+      <!-- Sub-tabs -->
+      <div class="learn-subtabs">
+        <div class="learn-subtab active" id="subtab-ciclo" onclick="switchLearnTab('ciclo',this)">
+          <i class="ti ti-moon" style="font-size:.9rem;vertical-align:-1px;margin-right:.3rem"></i>Su Ciclo
+        </div>
+        <div class="learn-subtab" id="subtab-compat" onclick="switchLearnTab('compat',this)">
+          <i class="ti ti-heart-handshake" style="font-size:.9rem;vertical-align:-1px;margin-right:.3rem"></i>Compatibilidad
+        </div>
+        <div class="learn-subtab" id="subtab-honor" onclick="switchLearnTab('honor',this)">
+          <i class="ti ti-shield-check" style="font-size:.9rem;vertical-align:-1px;margin-right:.3rem"></i>Código de Honor
+        </div>
+      </div>
+      <!-- Sub-page: Su Ciclo -->
+      <div class="learn-subpage active" id="learn-tab-ciclo">
+        <div id="learn-content"></div>
+      </div>
+      <!-- Sub-page: Compatibilidad -->
+      <div class="learn-subpage" id="learn-tab-compat">
+        <div id="compat-content"></div>
+      </div>
+      <!-- Sub-page: Código de Honor -->
+      <div class="learn-subpage" id="learn-tab-honor">
+        <div id="honor-content"></div>
+      </div>
+    </div>
+    <!-- HISTORIAL POLLO -->
+    <div class="page" id="pg-pollo-hist">
+      <div style="margin-bottom:1rem">
+        <div style="font-family:var(--font-display);font-size:1.6rem;color:var(--c-deep);margin-bottom:.3rem">Detalles enviados</div>
+        <div style="font-size:.82rem;color:var(--c-muted)">Tus gestos y mensajes para ella</div>
+      </div>
+      <!-- FORMULARIO PARA ENVÍO DE DETALLES PERSONALIZADOS -->
+      <div class="detail-form">
+        <div style="font-size:.8rem;font-weight:600;color:var(--c-deep);margin-bottom:.5rem"><i class="ti ti-pencil" style="margin-right:.3rem;vertical-align:-1px"></i>Escribe un detalle para ella</div>
+        <textarea id="detail-message" placeholder="Escribe aquí un mensaje, detalle o recordatorio que quieras que ella vea..."></textarea>
+        <button class="detail-send-btn" onclick="sendCustomDetail()">
+          <i class="ti ti-send" style="vertical-align:-2px;margin-right:.4rem"></i>Enviar detalle
+        </button>
+      </div>
+      <div id="sent-list"></div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchPagePollo('pollo-home',this)"><i class="ti ti-home"></i>Inicio</div>
+    <div class="nav-item" onclick="switchPagePollo('pollo-learn',this)"><i class="ti ti-book"></i>Aprende</div>
+    <div class="nav-item" onclick="switchPagePollo('pollo-hist',this)"><i class="ti ti-heart"></i>Detalles</div>
+  </div>
+</div>
+
+<!-- LOG SHEET -->
+<div class="log-sheet" id="log-sheet">
+  <div class="log-overlay" onclick="closeLog()"></div>
+  <div class="log-panel">
+    <div class="log-handle"></div>
+    <div class="log-title" id="log-title">Registrar hoy</div>
+    <input type="hidden" id="log-edit-index" value="">
+    <div class="log-section-label">Flujo</div>
+    <div class="flow-btns">
+      <div class="flow-btn" onclick="selectFlow(this,'Sin periodo')">—</div>
+      <div class="flow-btn" onclick="selectFlow(this,'Ligero')">Ligero</div>
+      <div class="flow-btn" onclick="selectFlow(this,'Moderado')">Moderado</div>
+      <div class="flow-btn" onclick="selectFlow(this,'Abundante')">Abundante</div>
+    </div>
+    <div class="log-section-label">Estado de ánimo</div>
+    <div class="chip-row" id="mood-chips">
+      <span class="chip" onclick="toggleChip(this,'mood')">&#128522; Feliz</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">&#128546; Sensible</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">&#128530; Irritable</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">&#128524; Tranquila</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">&#128564; Cansada</span>
+      <span class="chip" onclick="toggleChip(this,'mood')">&#129392; Romántica</span>
+    </div>
+    <div class="log-section-label">Síntomas físicos</div>
+    <div class="chip-row" id="physical-chips">
+      <span class="chip" onclick="toggleChip(this,'physical')">Cólicos</span>
+      <span class="chip" onclick="toggleChip(this,'physical')">Acné</span>
+      <span class="chip" onclick="toggleChip(this,'physical')">Hinchazón</span>
+      <span class="chip" onclick="toggleChip(this,'physical')">Dolor cabeza</span>
+      <span class="chip" onclick="toggleChip(this,'physical')">Senos sensibles</span>
+      <span class="chip" onclick="toggleChip(this,'physical')">Antojos</span>
+    </div>
+    <div class="privacy-row">
+      <span><i class="ti ti-eye-off" style="vertical-align:-2px;margin-right:.4rem;color:var(--c-lavender)"></i>Ocultar esto de tu pareja</span>
+      <label class="toggle"><input type="checkbox" id="private-toggle"><span class="toggle-slider"></span></label>
+    </div>
+    <button class="save-btn" id="log-save-btn" onclick="saveLog()">Guardar registro</button>
+  </div>
+</div>
+
+<!-- HOROSCOPE SHEET -->
+<div class="horoscope-sheet" id="horoscope-sheet">
+  <div class="horoscope-overlay" onclick="closeHoroscope()"></div>
+  <div class="horoscope-panel">
+    <div class="log-handle"></div>
+    <div class="log-title"><i class="ti ti-stars" style="color:var(--c-lavender);margin-right:.4rem;vertical-align:-2px"></i>Tu horóscopo</div>
+    <div style="font-size:.8rem;color:var(--c-muted);margin-bottom:1rem;line-height:1.5">Selecciona tu signo zodiacal para ver tu predicción de hoy.</div>
+
+    <div class="zodiac-grid" id="zodiac-grid"></div>
+
+    <div class="horoscope-result" id="horoscope-result">
+      <div class="horoscope-sign-display" id="horoscope-sign-display"></div>
+      <div class="horoscope-category" id="horoscope-cat"></div>
+      <div class="horoscope-text" id="horoscope-text"></div>
+      <div style="margin-top:1rem;padding-top:.75rem;border-top:1px solid rgba(184,168,212,.3)">
+        <div class="horoscope-category" id="horoscope-cat2"></div>
+        <div class="horoscope-text" id="horoscope-text2" style="margin-top:.25rem"></div>
+      </div>
+    </div>
+
+    <button class="save-btn" style="margin-top:.5rem;background:linear-gradient(135deg,var(--c-lavender) 0%,var(--c-pink-bright) 100%)" onclick="openCompatFromHoroscope()">
+      <i class="ti ti-heart-handshake" style="vertical-align:-2px;margin-right:.4rem"></i>Ver compatibilidad de mi signo
+    </button>
+    <button class="save-btn" style="margin-top:.5rem;background:var(--c-deep)" onclick="closeHoroscope()">Cerrar</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="detail-toast" id="toast"></div>
+
+<script>
+/* =============================================
+   USUARIOS Y CREDENCIALES — con persistencia
+   ============================================= */
+// Credenciales base
+const DEFAULT_USERS={
+  'mi princesa':{pass:'burbuja',role:'princesa'},
+  'don pollo':{pass:'pio-pio',role:'pollo'}
+};
+
+// Cargar credenciales guardadas o usar las predeterminadas
+function loadUsersFromStorage(){
+  try{
+    const saved=localStorage.getItem('pollitosUsers');
+    if(saved){
+      const parsed=JSON.parse(saved);
+      return parsed;
+    }
+  }catch(e){}
+  // Si no hay guardadas, clonar las predeterminadas
+  const clone={};
+  for(const k in DEFAULT_USERS){
+    clone[k]={...DEFAULT_USERS[k]};
+  }
+  return clone;
+}
+
+// Guardar credenciales en localStorage
+function saveUsersToStorage(){
+  localStorage.setItem('pollitosUsers',JSON.stringify(USERS));
+}
+
+let USERS=loadUsersFromStorage();
+
+/* =============================================
+   ESTADO GLOBAL — con carga de localStorage
+   ============================================= */
+function loadStateFromStorage(){
+  try{
+    const saved=localStorage.getItem('pollitosCycleConfig');
+    if(saved){
+      const cfg=JSON.parse(saved);
+      if(cfg.cycleStart) state.cycleStart=new Date(cfg.cycleStart);
+      if(cfg.cycleLen)   state.cycleLen=parseInt(cfg.cycleLen);
+      if(cfg.periodLen)  state.periodLen=parseInt(cfg.periodLen);
+      if(cfg.previousPeriods) state.previousPeriods=cfg.previousPeriods;
+    }
+  }catch(e){}
+  // Cargar detalles enviados por Don Pollo
+  try{
+    const dets=localStorage.getItem('pollitosCustomDetails');
+    if(dets){
+      state.customDetails=JSON.parse(dets).map(d=>({...d,date:new Date(d.date)}));
+    }
+  }catch(e){}
+}
+
+const state={
+  role:null,
+  today:new Date(),
+  cycleStart:new Date(new Date().setDate(new Date().getDate()-8)),
+  cycleLen:28,
+  periodLen:5,
+  previousPeriods:[null,null,null],
+  logs:[
+    {date:new Date(new Date().setDate(new Date().getDate()-2)),flow:'Moderado',moods:['&#128546; Sensible'],physical:['Cólicos'],priv:false},
+    {date:new Date(new Date().setDate(new Date().getDate()-1)),flow:'Ligero',moods:['&#128524; Tranquila'],physical:['Antojos'],priv:false},
+    {date:new Date(),flow:'Ligero',moods:['&#128522; Feliz'],physical:[],priv:true},
+  ],
+  selectedFlow:'',
+  selectedMoods:[],
+  selectedPhysical:[],
+  calOffset:0,
+  sentDetails:[],
+  customDetails:[],
+  privacySettings:{periodo:true,fase:true,animo:true,sintomas:false,notas:false,antojos:true},
+  reactionPending:null,
+  editingLogIndex:-1
+};
+
+// Carga los datos del ciclo desde localStorage al iniciar
+loadStateFromStorage();
+
+/* =============================================
+   LOGIN / LOGOUT
+   ============================================= */
+function doLogin(){
+  const u=document.getElementById('uname').value.trim().toLowerCase();
+  const p=document.getElementById('pass').value.trim().toLowerCase();
+  const user=USERS[u];
+  if(!user||user.pass!==p){
+    document.getElementById('lerr').textContent='Usuario o contraseña incorrectos';
+    document.getElementById('pass').value='';
+    return;
+  }
+  state.role=user.role;
+  document.getElementById('login').style.display='none';
+  if(user.role==='princesa'){
+    document.getElementById('shell-princesa').classList.add('active');
+    loadAvatars();
+    initPrincesa();
+  } else {
+    document.getElementById('shell-pollo').classList.add('active');
+    loadAvatars();
+    initPollo();
+  }
+}
+document.getElementById('pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('uname').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pass').focus()});
+
+function logout(){
+  state.role=null;
+  document.querySelectorAll('.shell').forEach(s=>s.classList.remove('active'));
+  document.getElementById('login').style.display='flex';
+  document.getElementById('uname').value='';
+  document.getElementById('pass').value='';
+  document.getElementById('lerr').textContent='';
+}
+
+/* =============================================
+   CÁLCULO DE CICLO
+   ============================================= */
+function getCycleDay(){
+  const ms=state.today-state.cycleStart;
+  return Math.floor(ms/(1000*60*60*24))+1;
+}
+function getPhase(day){
+  if(day<=state.periodLen)return{name:'Menstruación',cls:'menstrual',desc:'Tu cuerpo comienza el ciclo. Es normal sentir fatiga y cólicos leves. Descansa y cuídate.',emoji:'&#128564;'};
+  if(day<=13)return{name:'Fase Folicular',cls:'follicular',desc:'El estrógeno sube. Te sentirás con más energía y creatividad.',emoji:'&#128522;'};
+  if(day<=16)return{name:'Ovulación',cls:'ovulation',desc:'Pico de estrógeno y LH. Fertilidad máxima. Te sentirás social y con mucha energía.',emoji:'&#128525;'};
+  return{name:'Fase Lútea',cls:'luteal',desc:'La progesterona domina. Puedes sentirte más introspectiva y sensible.',emoji:'&#128532;'};
+}
+
+/* =============================================
+   INIT PRINCESA
+   ============================================= */
+function initPrincesa(){
+  const now=new Date();
+  document.getElementById('princesa-date-sub').textContent=now.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'});
+  const day=getCycleDay();
+  const phase=getPhase(day);
+  const banner=document.getElementById('phase-banner');
+  banner.className='phase-banner '+phase.cls;
+  document.getElementById('phase-name-text').textContent=phase.emoji+' '+phase.name;
+  document.getElementById('phase-desc-text').textContent=phase.desc;
+  document.getElementById('phase-day-text').textContent='Día '+day+' de tu ciclo';
+  const daysLeft=state.cycleLen-day+1;
+  document.getElementById('stat-next').textContent=daysLeft<0?1:daysLeft;
+  document.getElementById('stat-cycle').textContent=state.cycleLen;
+  // Actualizar insights
+  document.getElementById('insight-cycle-avg').textContent=state.cycleLen;
+  document.getElementById('insight-period-avg').textContent=state.periodLen;
+  // Poblar formulario de ajustes
+  populateCycleForm();
+  populateAccountForm();
+  renderCal();
+  renderLogs();
+  renderSymptomBars();
+  renderCycleChart();
+  renderReceivedDetails();
+}
+
+/* =============================================
+   MOD: GESTIÓN DEL CICLO — AJUSTES
+   ============================================= */
+function populateCycleForm(){
+  const startInput=document.getElementById('input-cycle-start');
+  const lenInput=document.getElementById('input-cycle-len');
+  const periodInput=document.getElementById('input-period-len');
+  if(!startInput)return;
+  // Formatear fecha como YYYY-MM-DD para el input date
+  const d=state.cycleStart;
+  const yyyy=d.getFullYear();
+  const mm=String(d.getMonth()+1).padStart(2,'0');
+  const dd=String(d.getDate()).padStart(2,'0');
+  startInput.value=`${yyyy}-${mm}-${dd}`;
+  lenInput.value=state.cycleLen;
+  periodInput.value=state.periodLen;
+  // Poblar periodos anteriores (fecha + duración ciclo + duración periodo)
+  for(let i=0;i<3;i++){
+    const dateInp=document.getElementById('prev-period-'+(i+1));
+    const cycleInp=document.getElementById('prev-cycle-'+(i+1));
+    const durInp=document.getElementById('prev-duration-'+(i+1));
+    const pd=state.previousPeriods?.[i];
+    if(dateInp && pd?.date){
+      const d=new Date(pd.date);
+      const pyy=d.getFullYear();
+      const pmm=String(d.getMonth()+1).padStart(2,'0');
+      const pdd=String(d.getDate()).padStart(2,'0');
+      dateInp.value=`${pyy}-${pmm}-${pdd}`;
+    } else if(dateInp){
+      dateInp.value='';
+    }
+    if(cycleInp){cycleInp.value=pd?.cycleLen||'';}
+    if(durInp){durInp.value=pd?.periodLen||'';}
+  }
+}
+
+function saveCycleSettings(){
+  const startVal=document.getElementById('input-cycle-start').value;
+  const lenVal=parseInt(document.getElementById('input-cycle-len').value);
+  const periodVal=parseInt(document.getElementById('input-period-len').value);
+
+  if(!startVal){showToast('Selecciona la fecha de inicio');return;}
+  if(isNaN(lenVal)||lenVal<21||lenVal>45){showToast('Ciclo: 21–45 días');return;}
+  if(isNaN(periodVal)||periodVal<2||periodVal>10){showToast('Periodo: 2–10 días');return;}
+
+  // Crear fecha sin desfase de zona horaria
+  const [y,m,d]=startVal.split('-').map(Number);
+  state.cycleStart=new Date(y,m-1,d);
+  state.cycleLen=lenVal;
+  state.periodLen=periodVal;
+
+  // Guardar periodos anteriores con fecha, duración ciclo y duración periodo
+  const prevPeriods=[];
+  const validCycles=[];
+  for(let i=1;i<=3;i++){
+    const dateVal=document.getElementById('prev-period-'+i).value;
+    const cycleLenVal=parseInt(document.getElementById('prev-cycle-'+i)?.value);
+    const periodLenVal=parseInt(document.getElementById('prev-duration-'+i)?.value);
+    if(dateVal){
+      const [py,pm,pd]=dateVal.split('-').map(Number);
+      prevPeriods.push({
+        date:new Date(py,pm-1,pd).toISOString(),
+        cycleLen:cycleLenVal||state.cycleLen,
+        periodLen:periodLenVal||state.periodLen
+      });
+      if(cycleLenVal)validCycles.push(cycleLenVal);
+    } else {
+      prevPeriods.push(null);
+    }
+  }
+  state.previousPeriods=prevPeriods;
+
+  // Calcular promedio de ciclos si hay datos válidos
+  if(validCycles.length>0){
+    const avgCycle=Math.round(validCycles.reduce((a,b)=>a+b,0)/validCycles.length);
+    state.cycleLen=avgCycle;
+    showToast('&#10003; Ciclo promedio: '+avgCycle+' días');
+  }
+
+  // Persistir en localStorage
+  localStorage.setItem('pollitosCycleConfig',JSON.stringify({
+    cycleStart:state.cycleStart.toISOString(),
+    cycleLen:state.cycleLen,
+    periodLen:state.periodLen,
+    previousPeriods:state.previousPeriods.map(d=>d?d.toISOString():null)
+  }));
+
+  // Actualizar ambas interfaces de forma inmediata
+  state.calOffset=0;
+  initPrincesa();
+  renderCal();
+  showToast('&#10003; Configuración guardada');
+}
+
+/* =============================================
+   MOD: CUENTA DE USUARIO
+   ============================================= */
+function populateAccountForm(){
+  const usernameInput=document.getElementById('account-username');
+  if(!usernameInput)return;
+  // Encontrar el nombre de usuario actual de la princesa
+  for(const [name,info] of Object.entries(USERS)){
+    if(info.role==='princesa'){
+      usernameInput.value=name;
+      break;
+    }
+  }
+  document.getElementById('account-password').value='';
+}
+
+function saveAccountSettings(){
+  const newUsername=document.getElementById('account-username').value.trim().toLowerCase();
+  const newPassword=document.getElementById('account-password').value.trim();
+
+  if(!newUsername){showToast('El nombre de usuario no puede estar vacío');return;}
+  if(newUsername.includes(' ')){showToast('El usuario no puede tener espacios');return;}
+
+  // Encontrar el usuario actual de la princesa
+  let currentUsername=null;
+  for(const [name,info] of Object.entries(USERS)){
+    if(info.role==='princesa'){
+      currentUsername=name;
+      break;
+    }
+  }
+
+  if(!currentUsername){showToast('Error: no se encontró usuario');return;}
+
+  // Si cambió el nombre de usuario
+  if(newUsername!==currentUsername){
+    // Si ya existe otro usuario con ese nombre
+    if(USERS[newUsername] && USERS[newUsername].role!=='princesa'){
+      showToast('Ese nombre de usuario ya está en uso');return;
+    }
+    // Crear nuevo entrada y eliminar la anterior
+    const oldData=USERS[currentUsername];
+    USERS[newUsername]={pass:newPassword||oldData.pass,role:'princesa'};
+    delete USERS[currentUsername];
+  }
+
+  // Si solo cambió la contraseña
+  if(newPassword){
+    USERS[newUsername||currentUsername].pass=newPassword.toLowerCase();
+  }
+
+  // Guardar en localStorage
+  saveUsersToStorage();
+
+  document.getElementById('account-password').value='';
+  showToast('&#10003; Cuenta actualizada automáticamente');
+}
+
+/* =============================================
+   CALENDARIO
+   ============================================= */
+const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+function renderCal(){
+  const base=new Date(state.today.getFullYear(),state.today.getMonth()+state.calOffset,1);
+  document.getElementById('cal-month-label').textContent=MONTHS[base.getMonth()]+' '+base.getFullYear();
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+  DAYS.forEach(d=>{const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);});
+  const firstDow=base.getDay();
+  for(let i=0;i<firstDow;i++){const el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
+  const daysInMonth=new Date(base.getFullYear(),base.getMonth()+1,0).getDate();
+  for(let d=1;d<=daysInMonth;d++){
+    const el=document.createElement('div');
+    el.className='cal-day';
+    el.textContent=d;
+    const date=new Date(base.getFullYear(),base.getMonth(),d);
+    const diffFromStart=Math.floor((date-state.cycleStart)/(1000*60*60*24));
+    const cycleDay=(diffFromStart%state.cycleLen+state.cycleLen)%state.cycleLen+1;
+    if(diffFromStart>=0&&diffFromStart<state.periodLen)el.classList.add('period');
+    else if(cycleDay>=13&&cycleDay<=16)el.classList.add('ovulation-day');
+    const isToday=date.toDateString()===state.today.toDateString();
+    if(isToday)el.classList.add('today');
+    const isFuturePeriod=diffFromStart>0&&cycleDay>=state.cycleLen-2;
+    if(isFuturePeriod&&date>state.today)el.classList.add('predicted');
+    el.onclick=()=>{el.classList.toggle('selected');};
+    grid.appendChild(el);
+  }
+}
+function changeMonth(d){state.calOffset+=d;renderCal();}
+
+/* =============================================
+   LOGS DE SÍNTOMAS — con EDICIÓN
+   ============================================= */
+function renderLogs(){
+  const list=document.getElementById('log-list');
+  list.innerHTML='';
+  const recent=[...state.logs].reverse().slice(0,6);
+  recent.forEach((log,idx)=>{
+    const originalIndex=state.logs.length-1-idx;
+    const div=document.createElement('div');
+    div.className='log-item';
+    const moods=log.moods.join(', ')||'Sin estado';
+    const phys=log.physical.join(', ')||'';
+    const editedTag=log.editedAt?'<span class="log-edited-tag">(editado '+new Date(log.editedAt).toLocaleString('es',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+')</span>':'';
+    div.innerHTML=`
+      <div class="log-item-icon ${log.priv?'private':'mood'}">
+        <i class="ti ti-${log.priv?'lock':'mood-smile'}" aria-hidden="true"></i>
+      </div>
+      <div class="log-item-text">
+        <strong>${log.flow!='Sin periodo'?'Flujo '+log.flow.toLowerCase()+' &#183; ':''}${moods}${editedTag}</strong>
+        <span>${phys||'Sin síntomas físicos'} &#183; ${log.date.toLocaleDateString('es',{day:'numeric',month:'short'})}</span>
+      </div>
+      ${log.priv?'<span class="private-badge"><i class="ti ti-lock" style="font-size:.7rem"></i> Privado</span>':''}
+      <button class="log-edit-btn" onclick="openEditLog(${originalIndex})" title="Editar registro">
+        <i class="ti ti-pencil" style="font-size:.75rem"></i>
+      </button>
+    `;
+    list.appendChild(div);
+  });
+  if(!recent.length)list.innerHTML='<div style="text-align:center;color:var(--c-muted);font-size:.85rem;padding:1.5rem 0">Sin registros aún. &#161;Agrega uno!</div>';
+}
+
+function openEditLog(index){
+  const log=state.logs[index];
+  if(!log)return;
+  state.editingLogIndex=index;
+  state.selectedFlow=log.flow;
+  state.selectedMoods=[...log.moods];
+  state.selectedPhysical=[...log.physical];
+
+  // Actualizar UI del modal
+  document.getElementById('log-title').textContent='Editar registro';
+  document.getElementById('log-edit-index').value=index;
+  document.getElementById('log-save-btn').textContent='Guardar cambios';
+  document.getElementById('private-toggle').checked=log.priv;
+
+  // Seleccionar flujo
+  const flowMap={'Sin periodo':0,'Ligero':1,'Moderado':2,'Abundante':3};
+  document.querySelectorAll('.flow-btn').forEach((b,i)=>{
+    b.classList.toggle('active',i===flowMap[log.flow]);
+  });
+
+  // Seleccionar chips de mood
+  document.querySelectorAll('#mood-chips .chip').forEach(chip=>{
+    const text=chip.textContent.trim();
+    chip.classList.toggle('active',log.moods.includes(text));
+  });
+
+  // Seleccionar chips físicos
+  document.querySelectorAll('#physical-chips .chip').forEach(chip=>{
+    const text=chip.textContent.trim();
+    chip.classList.toggle('active',log.physical.includes(text));
+  });
+
+  document.getElementById('log-sheet').classList.add('open');
+}
+
+function openLog(){
+  state.editingLogIndex=-1;
+  state.selectedFlow='';
+  state.selectedMoods=[];
+  state.selectedPhysical=[];
+  document.getElementById('log-title').textContent='Registrar hoy';
+  document.getElementById('log-edit-index').value='';
+  document.getElementById('log-save-btn').textContent='Guardar registro';
+  document.getElementById('private-toggle').checked=false;
+  document.querySelectorAll('.flow-btn,.chip').forEach(e=>e.classList.remove('active'));
+  document.getElementById('log-sheet').classList.add('open');
+}
+function closeLog(){document.getElementById('log-sheet').classList.remove('open');}
+
+function selectFlow(el,val){
+  state.selectedFlow=val;
+  document.querySelectorAll('.flow-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+function toggleChip(el,type){
+  el.classList.toggle('active');
+  if(type==='mood'){
+    const t=el.textContent.trim();
+    const i=state.selectedMoods.indexOf(t);
+    if(i<0)state.selectedMoods.push(t);else state.selectedMoods.splice(i,1);
+  } else {
+    const t=el.textContent.trim();
+    const i=state.selectedPhysical.indexOf(t);
+    if(i<0)state.selectedPhysical.push(t);else state.selectedPhysical.splice(i,1);
+  }
+}
+
+function saveLog(){
+  const priv=document.getElementById('private-toggle').checked;
+  const now=new Date();
+
+  if(state.editingLogIndex>=0){
+    // Modo edición
+    const log=state.logs[state.editingLogIndex];
+    log.flow=state.selectedFlow||'Sin periodo';
+    log.moods=[...state.selectedMoods];
+    log.physical=[...state.selectedPhysical];
+    log.priv=priv;
+    log.editedAt=now.toISOString();
+    showToast('Registro actualizado &#10003;');
+  } else {
+    // Modo nuevo registro
+    const log={
+      date:now,
+      flow:state.selectedFlow||'Sin periodo',
+      moods:[...state.selectedMoods],
+      physical:[...state.selectedPhysical],
+      priv
+    };
+    state.logs.push(log);
+    if(!priv&&(log.physical.includes('Antojos')||log.moods.some(m=>m.includes('Sensible')||m.includes('Irritable')))){
+      triggerReaction(log);
+    }
+    showToast('Registro guardado &#10003;');
+  }
+
+  closeLog();
+  renderLogs();
+  state.selectedFlow='';state.selectedMoods=[];state.selectedPhysical=[];
+  document.querySelectorAll('.flow-btn,.chip').forEach(e=>e.classList.remove('active'));
+  document.getElementById('private-toggle').checked=false;
+  state.editingLogIndex=-1;
+}
+
+function triggerReaction(log){
+  state.reactionPending=log;
+}
+
+function renderCycleChart(){
+  const c=document.getElementById('cycle-chart');
+  if(!c)return;
+  const periods=state.previousPeriods?.filter(p=>p&&p.date)||[];
+  if(periods.length===0){
+    c.innerHTML='<div style="text-align:center;color:var(--c-muted);font-size:.8rem;padding:1.5rem 0">Agrega tus periodos anteriores en Ajustes para ver el gráfico</div>';
+    return;
+  }
+  const colors=['#FF85A2','#FF69B4','#DDA0DD'];
+  let html='<div style="display:flex;align-items:flex-end;justify-content:center;gap:1rem;height:130px;padding:0 .5rem">';
+  const maxCycle=Math.max(...periods.map(p=>p.cycleLen||28),30);
+  periods.forEach((p,i)=>{
+    const cycleLen=p.cycleLen||28;
+    const periodLen=p.periodLen||5;
+    const h=Math.round((cycleLen/maxCycle)*100);
+    const ph=Math.round((periodLen/cycleLen)*100);
+    html+=`<div style="display:flex;flex-direction:column;align-items:center;gap:.3rem;flex:1;max-width:80px">
+      <div style="font-size:.65rem;color:var(--c-muted);text-align:center">${cycleLen}d / ${periodLen}d</div>
+      <div style="width:40px;height:${h}px;background:linear-gradient(180deg,${colors[i]} 0%,${colors[(i+1)%colors.length]} 100%);border-radius:8px 8px 0 0;position:relative;box-shadow:0 4px 12px rgba(255,105,180,.2)" title="Ciclo: ${cycleLen} días, Periodo: ${periodLen} días">
+        <div style="position:absolute;bottom:0;left:0;right:0;height:${ph}%;background:rgba(255,255,255,.35);border-radius:0 0 8px 8px"></div>
+      </div>
+      <div style="font-size:.7rem;color:var(--c-deep);font-weight:500">P-${i+1}</div>
+    </div>`;
+  });
+  html+='</div>';
+  html+=`<div style="display:flex;justify-content:center;gap:1.5rem;margin-top:.75rem;font-size:.68rem;color:var(--c-muted)">
+    <span><span style="display:inline-block;width:10px;height:10px;background:linear-gradient(135deg,#FF85A2,#FF69B4);border-radius:3px;margin-right:.3rem;vertical-align:middle"></span>Duración ciclo</span>
+    <span><span style="display:inline-block;width:10px;height:10px;background:rgba(255,255,255,.5);border:1px solid var(--c-border);border-radius:3px;margin-right:.3rem;vertical-align:middle"></span>Duración periodo</span>
+  </div>`;
+  c.innerHTML=html;
+}
+
+function renderSymptomBars(){
+  const data=[['Cólicos',68],['Antojos',55],['Cansancio',72],['Irritable',40],['Acné',30]];
+  const colors=['#FF85A2','#FF69B4','#DDA0DD','#FFB74D','#FF1493'];
+  const c=document.getElementById('symptom-bars');
+  c.innerHTML='';
+  data.forEach(([name,pct],i)=>{
+    c.innerHTML+=`<div style="margin-bottom:.75rem">
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.8rem;color:var(--c-deep)">${name}</span>
+        <span style="font-size:.8rem;color:var(--c-muted)">${pct}%</span>
+      </div>
+      <div style="height:8px;background:var(--c-border);border-radius:99px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${colors[i]},${colors[(i+1)%colors.length]});border-radius:99px;transition:width .8s ease"></div>
+      </div>
+    </div>`;
+  });
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.innerHTML=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function updatePrivacy(input,key){
+  state.privacySettings[key]=input.checked;
+}
+
+function switchPage(page,el){
+  document.querySelectorAll('#shell-princesa .page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+page).classList.add('active');
+  document.querySelectorAll('#shell-princesa .nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* =============================================
+   MOD 2: MOTOR ASTROLÓGICO AUTÓNOMO
+   ============================================= */
+const ZODIAC_SIGNS=[
+  {id:'aries',     name:'Aries',      symbol:'&#9800;', dates:'21 Mar – 19 Abr'},
+  {id:'tauro',     name:'Tauro',      symbol:'&#9801;', dates:'20 Abr – 20 May'},
+  {id:'geminis',   name:'Géminis',    symbol:'&#9802;', dates:'21 May – 20 Jun'},
+  {id:'cancer',    name:'Cáncer',     symbol:'&#9803;', dates:'21 Jun – 22 Jul'},
+  {id:'leo',       name:'Leo',        symbol:'&#9804;', dates:'23 Jul – 22 Ago'},
+  {id:'virgo',     name:'Virgo',      symbol:'&#9805;', dates:'23 Ago – 22 Sep'},
+  {id:'libra',     name:'Libra',      symbol:'&#9806;', dates:'23 Sep – 22 Oct'},
+  {id:'escorpion', name:'Escorpión',  symbol:'&#9807;', dates:'23 Oct – 21 Nov'},
+  {id:'sagitario', name:'Sagitario',  symbol:'&#9808;', dates:'22 Nov – 21 Dic'},
+  {id:'capricornio',name:'Capricornio',symbol:'&#9809;',dates:'22 Dic – 19 Ene'},
+  {id:'acuario',   name:'Acuario',    symbol:'&#9810;', dates:'20 Ene – 18 Feb'},
+  {id:'piscis',    name:'Piscis',     symbol:'&#9811;', dates:'19 Feb – 20 Mar'}
+];
+
+// Catálogo de predicciones por categoría (12 por categoría = 48 total)
+const HOROSCOPE_CATALOG=[
+  // BIENESTAR (índices 0–11)
+  {cat:'&#127807; Bienestar',text:'Tu cuerpo es sabio. Hoy, escucha sus señales y honra lo que necesitas, ya sea descanso, movimiento o silencio interior.'},
+  {cat:'&#127807; Bienestar',text:'Una pausa consciente de cinco minutos puede transformar cómo sientes todo el día. Respira profundo y suelta lo que no puedes controlar.'},
+  {cat:'&#127807; Bienestar',text:'Tu sistema nervioso merece cuidado hoy. Una infusión caliente y un momento de quietud harán maravillas en tu energía general.'},
+  {cat:'&#127807; Bienestar',text:'El sueño es tu medicina más poderosa esta noche. Prioriza acostarte temprano y desconectar pantallas al menos una hora antes.'},
+  {cat:'&#127807; Bienestar',text:'Tu intuición sobre tu salud es más precisa de lo que crees. Confía en las señales que tu cuerpo te está enviando con claridad.'},
+  {cat:'&#127807; Bienestar',text:'Hoy es buen día para hidratarte bien y agradecer a tu cuerpo todo lo que hace por ti cada día sin que lo notes.'},
+  {cat:'&#127807; Bienestar',text:'Un paseo corto al aire libre cargará tus baterías mejor que cualquier estimulante. La naturaleza es tu mayor aliada hoy.'},
+  {cat:'&#127807; Bienestar',text:'Tu energía es cíclica y eso es hermoso. Si sientes menos fuerza, no es retroceso, es preparación para tu próximo florecimiento.'},
+  {cat:'&#127807; Bienestar',text:'Hoy invita a la ternura contigo misma. Trata tus imperfecciones con la misma compasión que darías a alguien que amas.'},
+  {cat:'&#127807; Bienestar',text:'El movimiento suave, como yoga o estiramientos, será mucho más beneficioso que el ejercicio intenso hoy. Escucha tu cuerpo.'},
+  {cat:'&#127807; Bienestar',text:'Alimenta no solo tu cuerpo sino también tu mente. Un libro, un podcast o una conversación profunda te nutrirá profundamente.'},
+  {cat:'&#127807; Bienestar',text:'Hoy tu cuerpo te pide ser visto y atendido. Dedica aunque sea quince minutos a un ritual de cuidado personal sin apuros.'},
+  // AMOR (índices 12–23)
+  {cat:'&#128149; Amor',text:'Hoy el amor que te das a ti misma establece el estándar de todo lo demás. Eres suficiente y merecedora, exactamente como eres.'},
+  {cat:'&#128149; Amor',text:'La conexión auténtica florece cuando bajas la guardia. Permite que alguien especial vea tu mundo interior sin filtros hoy.'},
+  {cat:'&#128149; Amor',text:'Un gesto pequeño puede significar todo para la persona correcta. A veces el amor se comunica mejor a través de los detalles.'},
+  {cat:'&#128149; Amor',text:'Hay alguien pensando en ti con genuino cariño ahora mismo. Permítete recibirlo sin minimizarlo ni cuestionarlo.'},
+  {cat:'&#128149; Amor',text:'El amor verdadero no te pide que seas perfecta; te pide que seas real. Date permiso de mostrarte sin mascaras hoy.'},
+  {cat:'&#128149; Amor',text:'La conversación que has postergado podría traerte más paz de la que imaginas. Las palabras honestas siempre sanan.'},
+  {cat:'&#128149; Amor',text:'Tu capacidad de amar profundamente es uno de tus superpoderes más poderosos. No lo minimices ni lo des por sentado.'},
+  {cat:'&#128149; Amor',text:'Hoy el Universo conspira para acercarte a quienes vibran en tu misma frecuencia. Mantente abierta a esas conexiones.'},
+  {cat:'&#128149; Amor',text:'Compartir tu vulnerabilidad no es debilidad, es el camino más corto y verdadero hacia la intimidad genuina y profunda.'},
+  {cat:'&#128149; Amor',text:'Rodéate hoy de quienes te hacen reír desde el alma. La alegría compartida es el pegamento más fuerte de cualquier vínculo.'},
+  {cat:'&#128149; Amor',text:'Si sientes el impulso de expresar afecto, hazlo ahora. Las palabras de amor nunca sobran y siempre llegan en el momento correcto.'},
+  {cat:'&#128149; Amor',text:'Las relaciones que vale la pena cultivar son aquellas donde puedes ser completamente tú. Valóralas y cuídalas con atención.'},
+  // ENERGÍA (índices 24–35)
+  {cat:'&#9889; Energía',text:'Tu energía está en sintonía con el cosmos hoy. Observa si sientes expansión o recogimiento y fluye con ello sin resistencia.'},
+  {cat:'&#9889; Energía',text:'Esta es una jornada de claridad mental excepcional. Aprovecha las horas de la mañana para pensar en lo que verdaderamente importa.'},
+  {cat:'&#9889; Energía',text:'Hay una chispa creativa esperando ser activada en ti. Un pequeño proyecto, aunque sea por quince minutos, la encenderá hoy.'},
+  {cat:'&#9889; Energía',text:'Tu presencia es magnética en este momento. La gente a tu alrededor sentirá tu energía especial sin que digas una sola palabra.'},
+  {cat:'&#9889; Energía',text:'Los ciclos de energía baja son normales y necesarios. No te juzgues; estás acumulando fuerza para cuando el ciclo suba nuevamente.'},
+  {cat:'&#9889; Energía',text:'Hoy tu mente quiere resolver algo grande. Dale un problema interesante y encontrará satisfacción profunda en el proceso.'},
+  {cat:'&#9889; Energía',text:'La música que pongas hoy definirá el ritmo de toda tu jornada. Elige con intención y deja que el sonido te guíe desde adentro.'},
+  {cat:'&#9889; Energía',text:'Tienes más capacidad de la que crees para manejar todo lo que está en tu plato. Respira hondo y toma un paso a la vez.'},
+  {cat:'&#9889; Energía',text:'Una conversación estimulante con alguien que admiras recargará tus baterías más que cualquier otro tipo de descanso hoy.'},
+  {cat:'&#9889; Energía',text:'Tu energía se multiplica cuando la canalizas en algo que amas profundamente. Encuentra aunque sea diez minutos para eso hoy.'},
+  {cat:'&#9889; Energía',text:'Esta semana tienes una ventana especial de alta productividad. No la desperdicies en lo que no te pertenece ni te suma.'},
+  {cat:'&#9889; Energía',text:'El movimiento activa la vitalidad dormida en ti. Baila, camina o estírate. Tu cuerpo en movimiento es tu mejor versión.'},
+  // AUTOCUIDADO (índices 36–47)
+  {cat:'&#127800; Autocuidado',text:'Hoy date permiso de decir que no a algo que drena tu energía, sin culpa ni explicaciones. Tu paz es prioritaria.'},
+  {cat:'&#127800; Autocuidado',text:'Un baño largo, tu crema favorita y música suave no son lujos, son necesidades reales. Dátelos hoy con plena intención.'},
+  {cat:'&#127800; Autocuidado',text:'Escribir tres cosas por las que estás agradecida esta noche transformará profundamente cómo te despiertes mañana.'},
+  {cat:'&#127800; Autocuidado',text:'Tu espacio refleja tu estado mental. Un pequeño orden en tu entorno creará también claridad y orden dentro de ti.'},
+  {cat:'&#127800; Autocuidado',text:'Hoy invierte tiempo en algo que sea completamente tuyo, sin rendirle cuentas a nadie más. Es tu derecho y necesidad.'},
+  {cat:'&#127800; Autocuidado',text:'Alejarte del teléfono por una hora esta tarde será el regalo más renovador y necesario que puedas darte hoy mismo.'},
+  {cat:'&#127800; Autocuidado',text:'Prepara o pide la comida que más te consuela. Nutrirse bien es siempre un acto sagrado de amor propio y cuidado.'},
+  {cat:'&#127800; Autocuidado',text:'Date el regalo de la paciencia hoy, especialmente contigo misma. Estás haciendo lo mejor que puedes con lo que tienes.'},
+  {cat:'&#127800; Autocuidado',text:'Revisar tus límites es parte esencial del autocuidado. ¿Hay algo que necesitas ajustar para proteger tu paz mental?'},
+  {cat:'&#127800; Autocuidado',text:'Tu salud mental es tan importante como la física. Habla con alguien de confianza si algo pesa en tu corazón hoy.'},
+  {cat:'&#127800; Autocuidado',text:'Hoy termina el día con una pequeña rutina que señale a tu cuerpo que es tiempo de descansar. Honra esa transición.'},
+  {cat:'&#127800; Autocuidado',text:'Recuerda que el autocuidado también significa recibir ayuda cuando la necesitas. No tienes que cargar todo sola siempre.'}
+];
+
+// Motor astrológico: genera semilla desde la fecha y el índice del signo
+function getHoroscope(signId){
+  const now=new Date();
+  const seed=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+  const signIndex=ZODIAC_SIGNS.findIndex(s=>s.id===signId);
+  const total=HOROSCOPE_CATALOG.length;
+  const idx1=Math.abs((seed+signIndex*17))%total;
+  let idx2=Math.abs((seed+signIndex*17+total/4))%total;
+  if(Math.floor(idx2/12)===Math.floor(idx1/12))idx2=(idx2+12)%total;
+  return{p1:HOROSCOPE_CATALOG[idx1],p2:HOROSCOPE_CATALOG[idx2]};
+}
+
+function buildZodiacGrid(){
+  const grid=document.getElementById('zodiac-grid');
+  const savedSign=localStorage.getItem('pollitosZodiacSign_'+state.role)||'';
+  grid.innerHTML='';
+  ZODIAC_SIGNS.forEach(sign=>{
+    const btn=document.createElement('button');
+    btn.className='zodiac-btn'+(sign.id===savedSign?' selected':'');
+    btn.dataset.id=sign.id;
+    btn.innerHTML=`<span class="z-symbol">${sign.symbol}</span>${sign.name}`;
+    btn.onclick=()=>selectZodiac(sign.id);
+    grid.appendChild(btn);
+  });
+  // Mostrar selector de signo de pareja
+  const partnerSign=localStorage.getItem('pollitosPartnerZodiacSign')||'aries';
+  const partnerDiv=document.getElementById('zodiac-partner-select');
+  if(!partnerDiv){
+    const panel=document.querySelector('.horoscope-panel');
+    const partnerSelect=document.createElement('div');
+    partnerSelect.id='zodiac-partner-select';
+    partnerSelect.style.cssText='margin:1rem 0;padding:.75rem;background:var(--c-warm);border-radius:var(--r-sm);font-size:.8rem;color:var(--c-deep);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap';
+    partnerSelect.innerHTML=`<i class="ti ti-heart" style="color:var(--c-pink-bright)"></i><span>Signo de tu pareja:</span><select id="partner-zodiac-select" style="padding:.3rem .6rem;border-radius:var(--r-sm);border:1px solid var(--c-border);font-family:var(--font-body);font-size:.8rem;color:var(--c-deep);background:#fff;cursor:pointer;flex:1" onchange="savePartnerZodiac(this.value)"></select>`;
+    panel.insertBefore(partnerSelect,document.getElementById('zodiac-grid').nextSibling);
+    const select=document.getElementById('partner-zodiac-select');
+    ZODIAC_SIGNS.forEach(s=>{
+      const opt=document.createElement('option');
+      opt.value=s.id;opt.textContent=s.name;
+      if(s.id===partnerSign)opt.selected=true;
+      select.appendChild(opt);
+    });
+  }
+}
+
+function selectZodiac(signId){
+  localStorage.setItem('pollitosZodiacSign_'+state.role,signId);
+  document.querySelectorAll('.zodiac-btn').forEach(b=>{
+    b.classList.toggle('selected',b.dataset.id===signId);
+  });
+  showHoroscopeResult(signId);
+}
+
+function savePartnerZodiac(signId){
+  localStorage.setItem('pollitosPartnerZodiacSign',signId);
+  showToast('&#128149; Signo de pareja guardado');
+}
+
+function showHoroscopeResult(signId){
+  const sign=ZODIAC_SIGNS.find(s=>s.id===signId);
+  if(!sign)return;
+  const {p1,p2}=getHoroscope(signId);
+  document.getElementById('horoscope-sign-display').innerHTML=`
+    <span class="horoscope-sign-symbol">${sign.symbol}</span>
+    <div class="horoscope-sign-info">
+      <strong>${sign.name}</strong>
+      <span>${sign.dates}</span>
+    </div>
+  `;
+  document.getElementById('horoscope-cat').innerHTML=p1.cat;
+  document.getElementById('horoscope-text').textContent=p1.text;
+  document.getElementById('horoscope-cat2').innerHTML=p2.cat;
+  document.getElementById('horoscope-text2').textContent=p2.text;
+  document.getElementById('horoscope-result').classList.add('visible');
+}
+
+function openHoroscope(){
+  buildZodiacGrid();
+  const saved=localStorage.getItem('pollitosZodiacSign_'+state.role);
+  const result=document.getElementById('horoscope-result');
+  if(saved){
+    showHoroscopeResult(saved);
+  } else {
+    result.classList.remove('visible');
+  }
+  document.getElementById('horoscope-sheet').classList.add('open');
+}
+function closeHoroscope(){document.getElementById('horoscope-sheet').classList.remove('open');}
+
+function openCompatFromHoroscope(){
+  closeHoroscope();
+  // Obtener signo guardado o usar default
+  const savedSign=localStorage.getItem('pollitosZodiacSign_'+state.role)||'virgo';
+  const partnerSign=localStorage.getItem('pollitosPartnerZodiacSign')||'aries';
+  // Si el usuario es princesa, su signo es el savedSign y el de su pareja es partnerSign
+  // Si el usuario es pollo, su signo es partnerSign y el de su pareja es savedSign
+  let sign1,sign2;
+  if(state.role==='princesa'){
+    sign1=savedSign;sign2=partnerSign;
+  }else{
+    sign1=partnerSign;sign2=savedSign;
+  }
+  showCompatibilityBetween(sign1,sign2);
+  // Abrir la página de compatibilidad
+  if(state.role==='pollo'){
+    switchLearnTab('compat',document.getElementById('subtab-compat'));
+  }else{
+    // Para princesa, abrir en una modal o mostrar de otra forma
+    showToast('&#128149; Ver compatibilidad en Aprende > Compatibilidad');
+  }
+}
+
+/* =============================================
+   DON POLLO — INIT, NOTIFICACIONES, HORMONAS
+   ============================================= */
+function initPollo(){
+  const now=new Date();
+  document.getElementById('pollo-date-sub').textContent=now.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'});
+  const day=getCycleDay();
+  const phase=getPhase(day);
+  const daysLeft=state.cycleLen-day+1;
+  document.getElementById('pollo-countdown').textContent=daysLeft<1?1:daysLeft;
+  document.getElementById('pollo-phase-badge').textContent=phase.name;
+  const msgs={
+    'Menstruación':'Este es el momento de cuidarla más. Un abrazo va muy lejos.',
+    'Fase Folicular':'Ella está con energía. Propón planes juntos.',
+    'Ovulación':'Su ánimo está en su punto más alto. Momento perfecto para sorpresas.',
+    'Fase Lútea':'Puede estar más sensible. Escucha más, habla menos.'
+  };
+  document.getElementById('pollo-msg').textContent=msgs[phase.name]||'Estás conectado a su ciclo.';
+  renderHormoneBars(day);
+  renderEnergySemaphore();
+  renderNotifications(day,daysLeft);
+  renderLearnContent();
+  renderHonorContent();
+  renderCompatibility();
+  checkPendingReaction();
+  renderSentList();
+}
+
+function renderEnergySemaphore(){
+  const c=document.getElementById('energy-bars');
+  const badge=document.getElementById('energy-badge');
+  const advice=document.getElementById('energy-advice');
+  if(!c||!badge||!advice)return;
+  // Buscar logs de hoy
+  const today=new Date().toDateString();
+  const todayLogs=state.logs.filter(l=>new Date(l.date).toDateString()===today&&!l.priv);
+  if(todayLogs.length===0){
+    c.innerHTML='<div style="text-align:center;color:var(--c-muted);font-size:.8rem;padding:1rem 0">Aún no hay registros de hoy. Cuando ella registre su estado, verás el semáforo aquí.</div>';
+    badge.textContent='Sin datos';
+    badge.style.background='#F5F5F5';
+    badge.style.color='#9E9E9E';
+    advice.textContent='Esperando a que ella registre cómo se siente hoy...';
+    return;
+  }
+  // Calcular nivel de energía (0-100)
+  let energyScore=70; // base
+  let socialScore=70; // base
+  const moods=todayLogs.flatMap(l=>l.moods||[]);
+  const physical=todayLogs.flatMap(l=>l.physical||[]);
+  // Ajustar según moods
+  if(moods.some(m=>m.includes('Feliz')||m.includes('Romántica'))){energyScore+=15;socialScore+=20;}
+  if(moods.some(m=>m.includes('Tranquila'))){energyScore+=5;socialScore+=5;}
+  if(moods.some(m=>m.includes('Sensible'))){energyScore-=10;socialScore-=5;}
+  if(moods.some(m=>m.includes('Irritable'))){energyScore-=20;socialScore-=15;}
+  if(moods.some(m=>m.includes('Cansada'))){energyScore-=25;socialScore-=10;}
+  // Ajustar según síntomas físicos
+  if(physical.includes('Cólicos')){energyScore-=20;socialScore-=10;}
+  if(physical.includes('Dolor cabeza')){energyScore-=15;socialScore-=5;}
+  if(physical.includes('Hinchazón')){energyScore-=10;socialScore-=5;}
+  if(physical.includes('Acné')){energyScore-=5;socialScore-=15;}
+  if(physical.includes('Senos sensibles')){energyScore-=10;socialScore-=5;}
+  if(physical.includes('Antojos')){energyScore-=5;socialScore+=0;}
+  // Clamp a 0-100
+  energyScore=Math.max(0,Math.min(100,energyScore));
+  socialScore=Math.max(0,Math.min(100,socialScore));
+  const avgScore=Math.round((energyScore+socialScore)/2);
+  // Determinar color y etiqueta
+  let color,label,bgColor;
+  if(avgScore>=75){color='linear-gradient(90deg,#66BB6A,#43A047)';label='Energía alta';bgColor='#E8F5E9';}
+  else if(avgScore>=45){color='linear-gradient(90deg,#FFB74D,#FF9800)';label='Energía media';bgColor='#FFF8E1';}
+  else{color='linear-gradient(90deg,#EF5350,#E53935)';label='Energía baja';bgColor='#FFEBEE';}
+  badge.textContent=label;
+  badge.style.background=bgColor;
+  badge.style.color=avgScore>=75?'#2E7D32':avgScore>=45?'#E65100':'#C62828';
+  // Render barras
+  c.innerHTML=`<div style="margin-bottom:.6rem">
+    <div style="display:flex;justify-content:space-between;margin-bottom:.25rem">
+      <span style="font-size:.75rem;color:var(--c-deep)">&#9889; Nivel de energía</span>
+      <span style="font-size:.75rem;color:var(--c-muted)">${energyScore}%</span>
+    </div>
+    <div style="height:10px;background:var(--c-border);border-radius:99px;overflow:hidden">
+      <div style="height:100%;width:${energyScore}%;background:${color};border-radius:99px;transition:width 1s ease"></div>
+    </div>
+  </div>
+  <div style="margin-bottom:.3rem">
+    <div style="display:flex;justify-content:space-between;margin-bottom:.25rem">
+      <span style="font-size:.75rem;color:var(--c-deep)">&#127908; Batería social</span>
+      <span style="font-size:.75rem;color:var(--c-muted)">${socialScore}%</span>
+    </div>
+    <div style="height:10px;background:var(--c-border);border-radius:99px;overflow:hidden">
+      <div style="height:100%;width:${socialScore}%;background:${color};border-radius:99px;transition:width 1s ease"></div>
+    </div>
+  </div>`;
+  // Consejo
+  const adviceTexts={
+    high:`&#127775; Hoy ella está con buena energía. Es un gran día para planes juntos, conversaciones y actividades. Aprovéchalo!`,
+    medium:`&#128161; Energía moderada hoy. Ella puede necesitar algunos descansos. Planes tranquilos y cercanía son lo mejor.`,
+    low:`&#127808; Hoy su energía está baja. Lo que más necesita es tu apoyo, paciencia y gestos de cariño. Un abrazo largo lo cambia todo.`
+  };
+  advice.innerHTML=avgScore>=75?adviceTexts.high:avgScore>=45?adviceTexts.medium:adviceTexts.low;
+}
+
+function renderHormoneBars(day){
+  const c=document.getElementById('hormone-bars');
+  const estrogeno=day<=13?Math.min(95,day*7):day<=16?95:Math.max(20,95-(day-16)*8);
+  const progesterona=day<=16?10:Math.min(90,(day-16)*12);
+  const lh=day>=13&&day<=15?90:15;
+  const data=[
+    ['Estrógeno',Math.round(estrogeno),'#DDA0DD'],
+    ['Progesterona',Math.round(progesterona),'#FF85A2'],
+    ['LH',Math.round(lh),'#FF69B4']
+  ];
+  c.innerHTML='';
+  data.forEach(([name,pct,color])=>{
+    c.innerHTML+=`<div class="hormone-row">
+      <span class="hormone-name">${name}</span>
+      <div class="hormone-track-bar"><div class="hormone-fill" style="width:${pct}%;background:${color}"></div></div>
+      <span style="font-size:.72rem;color:var(--c-muted);width:30px;text-align:right">${pct}%</span>
+    </div>`;
+  });
+}
+
+function renderNotifications(day,daysLeft){
+  const list=document.getElementById('notif-list');
+  const tips=[];
+  if(daysLeft<=3)tips.push({type:'alert',icon:'ti-alert-triangle',text:`<strong>En ${daysLeft} días</strong> llega su periodo. Consíguele sus chocolates favoritos o prepara una peli cómoda.`});
+  if(daysLeft<=7&&daysLeft>3)tips.push({type:'tip',icon:'ti-gift',text:`<strong>Faltan ${daysLeft} días</strong> para su periodo. Es buen momento para planear algo especial.`});
+  if(day>=13&&day<=16)tips.push({type:'good',icon:'ti-sparkles',text:`<strong>¡Hoy es su ovulación!</strong> Está con la energía al máximo. Propón una cita especial.`});
+  if(day<=5)tips.push({type:'alert',icon:'ti-heart',text:`<strong>Está en su periodo.</strong> Agua caliente, chocolate y mucha paciencia son lo mejor hoy.`});
+  tips.push({type:'good',icon:'ti-bulb',text:`En la fase <strong>folicular</strong> le encanta descubrir cosas nuevas. Sorpréndela con una receta o lugar nuevo.`});
+  if(day>16)tips.push({type:'tip',icon:'ti-moon',text:`La fase lútea puede traer cambios de humor. No lo tomes personal, es hormonal. <strong>Sé su refugio.</strong>`});
+  list.innerHTML='';
+  tips.slice(0,3).forEach(t=>{
+    list.innerHTML+=`<div class="notif-card ${t.type}"><i class="ti ${t.icon}" aria-hidden="true"></i><p>${t.text}</p></div>`;
+  });
+  if(state.reactionPending){
+    const rb=document.getElementById('reaction-bar');
+    rb.style.display='block';
+    const log=state.reactionPending;
+    const what=[];
+    if(log.physical.includes('Antojos'))what.push('antojo');
+    if(log.moods.some(m=>m.includes('Sensible')))what.push('sensible');
+    if(log.moods.some(m=>m.includes('Irritable')))what.push('irritable');
+    document.getElementById('reaction-what').textContent=`Ella registró que se siente ${what.join(' y ')||'diferente'} en este momento.`;
+    const reactions=[
+      ['ti-cookie','Enviarle dulces','¡Dulces enviados! &#127852;'],
+      ['ti-heart','Mensaje de amor','&#128140; Mensaje enviado'],
+      ['ti-home','Pedir delivery','&#127829; ¡Pedido en camino!'],
+      ['ti-mood-smile','Meme gracioso','&#128514; ¡Meme enviado!']
+    ];
+    const btns=document.getElementById('reaction-btns');
+    btns.innerHTML='';
+    reactions.forEach(([icon,label,confirm])=>{
+      btns.innerHTML+=`<button class="reaction-btn" onclick="sendReaction(this,'${confirm}')"><i class="ti ${icon}" aria-hidden="true" style="display:block;font-size:1.3rem;margin-bottom:.3rem"></i>${label}</button>`;
+    });
+  }
+}
+
+function sendReaction(btn,msg){
+  btn.classList.add('sent');
+  btn.textContent=msg;
+  showToast(msg);
+  const d={date:new Date(),msg,source:'reaction'};
+  state.sentDetails.push(d);
+  renderSentList();
+}
+
+/* =============================================
+   MOD: DETALLES PERSONALIZADOS DE DON POLLO
+   ============================================= */
+function sendCustomDetail(){
+  const textarea=document.getElementById('detail-message');
+  const message=textarea.value.trim();
+  if(!message){showToast('Escribe un mensaje antes de enviar');return;}
+
+  const detail={
+    date:new Date(),
+    message:message,
+    id:Date.now()
+  };
+
+  state.customDetails.push(detail);
+
+  // Guardar en localStorage para que la princesa los vea
+  localStorage.setItem('pollitosCustomDetails',JSON.stringify(state.customDetails.map(d=>({...d,date:d.date.toISOString()}))));
+
+  // También agregar a la lista de enviados
+  const sentItem={date:new Date(),msg:'&#128172; '+message.substring(0,40)+(message.length>40?'...':''),source:'custom',fullMessage:message};
+  state.sentDetails.push(sentItem);
+
+  textarea.value='';
+  renderSentList();
+  showToast('&#128140; Detalle enviado a tu princesa');
+}
+
+function renderSentList(){
+  const list=document.getElementById('sent-list');
+  const allSent=[...state.sentDetails].reverse();
+
+  if(!allSent.length){
+    list.innerHTML='<div style="text-align:center;color:var(--c-muted);font-size:.85rem;padding:2rem 0">Aún no has enviado detalles este ciclo.<br>&#161;Sé el primero en consentirla!</div>';
+    return;
+  }
+
+  list.innerHTML='';
+  allSent.forEach(d=>{
+    const isCustom=d.source==='custom';
+    const bg=isCustom?'var(--c-lav-light)':'#FDE8E4';
+    const icon=isCustom?'ti-message-heart':'ti-heart';
+    const color=isCustom?'var(--c-lavender)':'var(--c-terra)';
+    const content=isCustom?(d.fullMessage||d.msg):d.msg;
+
+    list.innerHTML+=`<div class="sent-detail-card">
+      <div class="icon" style="background:${bg};color:${color}">
+        <i class="ti ${icon}" aria-hidden="true"></i>
+      </div>
+      <div class="text">
+        <strong>${isCustom?'Mensaje para ella':'Reacción'}</strong>
+        <p>${content}</p>
+      </div>
+      <div class="time">${d.date.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`;
+  });
+}
+
+function renderReceivedDetails(){
+  const container=document.getElementById('received-details-list');
+  const details=state.customDetails;
+  if(!details||!details.length){
+    container.innerHTML='<div style="text-align:center;color:var(--c-muted);font-size:.82rem;padding:1rem 0;font-style:italic">Aún no has recibido detalles de Don Pollo</div>';
+    return;
+  }
+
+  container.innerHTML='';
+  [...details].reverse().forEach(d=>{
+    container.innerHTML+=`<div class="received-detail-card">
+      <div class="icon">
+        <i class="ti ti-heart" aria-hidden="true"></i>
+      </div>
+      <div class="text">
+        <strong>&#128140; De Don Pollo</strong>
+        <p>${d.message}</p>
+      </div>
+      <div class="time">${new Date(d.date).toLocaleString('es',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`;
+  });
+}
+
+function checkPendingReaction(){renderSentList();}
+
+/* =============================================
+   COMPATIBILIDAD ZODIACAL DINÁMICA
+   ============================================= */
+const COMPAT_MATRIX={
+  'aries':{aries:75, tauro:65, geminis:85, cancer:55, leo:95, virgo:70, libra:88, escorpion:60, sagitario:92, capricornio:55, acuario:90, piscis:50},
+  'tauro':{aries:65, tauro:80, geminis:60, cancer:90, leo:60, virgo:95, libra:65, escorpion:92, sagitario:55, capricornio:88, acuario:55, piscis:85},
+  'geminis':{aries:85, tauro:60, geminis:80, cancer:55, leo:88, virgo:65, libra:93, escorpion:55, sagitario:90, capricornio:60, acuario:95, piscis:60},
+  'cancer':{aries:55, tauro:90, geminis:55, cancer:85, leo:60, virgo:88, libra:55, escorpion:95, sagitario:50, capricornio:82, acuario:50, piscis:92},
+  'leo':{aries:95, tauro:60, geminis:88, cancer:60, leo:85, virgo:65, libra:90, escorpion:58, sagitario:93, capricornio:60, acuario:88, piscis:55},
+  'virgo':{aries:70, tauro:95, geminis:65, cancer:88, leo:65, virgo:85, libra:70, escorpion:90, sagitario:60, capricornio:92, acuario:65, piscis:88},
+  'libra':{aries:88, tauro:65, geminis:93, cancer:55, leo:90, virgo:70, libra:82, escorpion:65, sagitario:88, capricornio:60, acuario:90, piscis:65},
+  'escorpion':{aries:60, tauro:92, geminis:55, cancer:95, leo:58, virgo:90, libra:65, escorpion:88, sagitario:60, capricornio:90, acuario:65, piscis:92},
+  'sagitario':{aries:92, tauro:55, geminis:90, cancer:50, leo:93, virgo:60, libra:88, escorpion:60, sagitario:85, capricornio:65, acuario:92, piscis:55},
+  'capricornio':{aries:55, tauro:88, geminis:60, cancer:82, leo:60, virgo:92, libra:60, escorpion:90, sagitario:65, capricornio:88, acuario:60, piscis:85},
+  'acuario':{aries:90, tauro:55, geminis:95, cancer:50, leo:88, virgo:65, libra:90, escorpion:65, sagitario:92, capricornio:60, acuario:85, piscis:60},
+  'piscis':{aries:50, tauro:85, geminis:60, cancer:92, leo:55, virgo:88, libra:65, escorpion:92, sagitario:55, capricornio:85, acuario:60, piscis:88}
+};
+
+function getCompatDescription(s1,s2){
+  const n1=ZODIAC_SIGNS.find(s=>s.id===s1);
+  const n2=ZODIAC_SIGNS.find(s=>s.id===s2);
+  if(!n1||!n2)return{text:'',items:[]};
+  const el1={aries:'fuego',tauro:'tierra',geminis:'aire',cancer:'agua',leo:'fuego',virgo:'tierra',libra:'aire',escorpion:'agua',sagitario:'fuego',capricornio:'tierra',acuario:'aire',piscis:'agua'}[s1];
+  const el2={aries:'fuego',tauro:'tierra',geminis:'aire',cancer:'agua',leo:'fuego',virgo:'tierra',libra:'aire',escorpion:'agua',sagitario:'fuego',capricornio:'tierra',acuario:'aire',piscis:'agua'}[s2];
+  const elementos={fuego:'&#128293;',tierra:'&#127793;',aire:'&#127788;&#65039;',agua:'&#127754;'};
+  return{
+    text:`${n1.name} y ${n2.name} son una combinación de <strong>${elementos[el1]} ${el1} y ${elementos[el2]} ${el2}</strong>. Cada relación zodiacal tiene su propia magia cuando ambos aprenden a fluir juntos.`,
+    items:[
+      {title:`&#127793; ${n1.name} aporta:`,text:`Su energía ${el1} trae ${getElementQualities(s1)} al vínculo. Su forma de amar es única y especial.`},
+      {title:`&#128293; ${n2.name} aporta:`,text:`Su energía ${el2} aporta ${getElementQualities(s2)}, creando un equilibrio natural con su pareja.`},
+      {title:`&#9889; Dinámica de fuerzas:`,text:`La clave está en respetar las diferencias. ${n1.name} puede enseñar paciencia y profundidad, mientras ${n2.name} aporta pasión y movimiento.`},
+      {title:`&#128157; Cómo se complementan:`,text:`Juntos forman un equipo donde las cualidades de uno cubren las áreas de crecimiento del otro. La complementariedad es su mayor fortaleza.`},
+      {title:`&#127775; Crecimiento mutuo:`,text:`Cada desafío es una oportunidad para crecer. La paciencia, el respeto y el amor incondicional son la base de esta conexión especial.`},
+      {title:`&#128171; Consejo del día:`,text:'Recuerden que no se trata de quién tiene la razón, sino de qué necesita el otro. La empatía y el cariño lo pueden todo.'}
+    ]
+  };
+}
+
+function getElementQualities(sign){
+  const q={
+    aries:'valentía, iniciativa y pasión',tauro:'estabilidad, sensualidad y perseverancia',geminis:'comunicación, versatilidad y curiosidad',
+    cancer:'cuidado, intuición y protección',leo:'generosidad, liderazgo y calidez',virgo:'atención al detalle, servicio y bondad',
+    libra:'armonía, diplomacia y romanticismo',escorpion:'profundidad, lealtad y transformación',sagitario:'optimismo, aventura y honestidad',
+    capricornio:'responsabilidad, ambición y lealtad',acuario:'originalidad, independencia y visión',piscis:'compasión, creatividad e intuición'
+  };
+  return q[sign]||'cualidades únicas';
+}
+
+function showCompatibilityBetween(s1,s2){
+  const c=document.getElementById('compat-content');
+  if(!c)return;
+  const n1=ZODIAC_SIGNS.find(s=>s.id===s1);
+  const n2=ZODIAC_SIGNS.find(s=>s.id===s2);
+  if(!n1||!n2)return;
+  const score=COMPAT_MATRIX[s1]?.[s2]||75;
+  const desc=getCompatDescription(s1,s2);
+  c.innerHTML=`<div class="compat-card">
+    <div class="compat-signs">
+      <div class="compat-sign">
+        <span class="compat-symbol">${n1.symbol}</span>
+        <span class="compat-name">${n1.name}</span>
+        <span class="compat-date">${n1.dates}</span>
+      </div>
+      <span class="compat-plus">+</span>
+      <div class="compat-sign">
+        <span class="compat-symbol">${n2.symbol}</span>
+        <span class="compat-name">${n2.name}</span>
+        <span class="compat-date">${n2.dates}</span>
+      </div>
+    </div>
+    <div class="compat-score">
+      <div class="compat-score-num">${score}%</div>
+      <div class="compat-score-lbl">Compatibilidad</div>
+      <div class="compat-bar"><div class="compat-bar-fill" style="width:${score}%"></div></div>
+    </div>
+    <div style="font-size:.82rem;color:var(--c-deep);line-height:1.65;margin-bottom:.75rem">
+      ${desc.text}
+    </div>
+  </div>`;
+  desc.items.forEach(item=>{
+    c.innerHTML+=`<div class="compat-item"><strong>${item.title}</strong><span>${item.text}</span></div>`;
+  });
+  c.innerHTML+=`<div style="background:var(--c-warm);border-radius:var(--r-sm);padding:.85rem 1rem;margin-top:.75rem;font-size:.8rem;color:var(--c-deep);line-height:1.5">
+    <i class="ti ti-sparkles" style="color:var(--c-pink-bright);vertical-align:-2px;margin-right:.4rem"></i>
+    <strong>Frase clave:</strong> "El amor verdadero no se encuentra, se construye día a día."
+  </div>`;
+}
+
+function renderCompatibility(){
+  const savedSign=localStorage.getItem('pollitosZodiacSign_princesa')||'virgo';
+  const partnerSign=localStorage.getItem('pollitosPartnerZodiacSign')||'aries';
+  showCompatibilityBetween(savedSign,partnerSign);
+}
+
+/* =============================================
+   APRENDE — SU CICLO (contenido original)
+   ============================================= */
+const learnData=[
+  {phase:'Menstruación',color:'#FF85A2',days:'Días 1–5',body:'El revestimiento uterino se desprende. Los niveles hormonales están en su punto más bajo. Es completamente normal que ella se sienta cansada, tenga cólicos y quiera más calor y consuelo.',tip:'Ten a mano analgésicos, agua caliente y sus snacks favoritos. El calor en el abdomen alivia mucho los cólicos.'},
+  {phase:'Fase Folicular',color:'#FF69B4',days:'Días 6–13',body:'El estrógeno comienza a subir. Los folículos del ovario maduran. Ella empezará a sentirse con más energía, creatividad y disposición social. Es un excelente momento para planes nuevos.',tip:'Propón actividades físicas, salidas nuevas o conversaciones importantes. Su mente está muy abierta en esta fase.'},
+  {phase:'Ovulación',color:'#DDA0DD',days:'Días 13–16',body:'Pico de estrógeno y hormona LH. Un óvulo es liberado. Su energía está al máximo, se siente más sociable, segura y de excelente humor. Es el momento de mayor fertilidad.',tip:'Es el mejor momento para una cita especial, sorpresas o hablar de temas del futuro. Ella estará especialmente receptiva.'},
+  {phase:'Fase Lútea',color:'#FFB74D',days:'Días 17–28',body:'La progesterona sube. Si no hay embarazo, ambas hormonas caen al final. Puede sentirse más introspectiva, sensible, tener antojos y cambios de humor. Esto es fisiológico, no es un capricho.',tip:'Sé su espacio seguro. Escucha sin intentar "solucionar". Un abrazo largo vale más que mil consejos en esta fase.'}
+];
+
+function renderLearnContent(){
+  const c=document.getElementById('learn-content');
+  c.innerHTML='';
+  learnData.forEach((item,i)=>{
+    c.innerHTML+=`<div class="learn-item">
+      <div class="learn-header" onclick="toggleLearn(${i})">
+        <div class="learn-phase-dot" style="background:${item.color}"></div>
+        <div class="learn-title">${item.phase}</div>
+        <span style="font-size:.72rem;color:var(--c-muted);margin-right:.5rem">${item.days}</span>
+        <i class="ti ti-chevron-down" id="learn-chev-${i}" style="color:var(--c-muted);transition:transform .2s" aria-hidden="true"></i>
+      </div>
+      <div class="learn-body" id="learn-body-${i}">
+        <p style="margin-bottom:.75rem">${item.body}</p>
+        <div class="learn-tip"><strong>&#128161; Tu acción:</strong> ${item.tip}</div>
+      </div>
+    </div>`;
+  });
+}
+
+function toggleLearn(i){
+  const body=document.getElementById('learn-body-'+i);
+  const chev=document.getElementById('learn-chev-'+i);
+  const isOpen=body.classList.contains('open');
+  document.querySelectorAll('.learn-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('[id^=learn-chev]').forEach(c=>c.style.transform='');
+  if(!isOpen){body.classList.add('open');chev.style.transform='rotate(180deg)';}
+}
+
+/* =============================================
+   CÓDIGO DE HONOR
+   ============================================= */
+const honorData=[
+  {
+    icon:'ti-yin-yang',
+    iconBg:'#EDE8F5',
+    iconColor:'#534AB7',
+    title:'Polaridad de Energías',
+    subtitle:'El balance que sostiene la relación',
+    body:`La atracción profunda en una pareja nace del contraste entre dos tipos de energía complementarias. Ninguna es superior; ambas son necesarias.
+
+<span class="honor-pill" style="background:#FCE6FA;color:#FF1493">&#9889; Energía masculina</span> Se expresa como <strong>presencia constante</strong>, capacidad de establecer dirección clara y generar estabilidad. Es el árbol que no se dobla ante el viento — no porque sea rígido, sino porque tiene raíces profundas. Cuando ella está en tormenta, tu presencia tranquila es lo que más valor tiene.
+
+<span class="honor-pill" style="background:#FFE4EC;color:#FF1493">&#127754; Energía femenina</span> Se expresa como <strong>fluidez emocional</strong>, intuición agudizada y la capacidad de conectar con los ciclos naturales. Esta energía no es debilidad; es inteligencia emocional en su forma más pura. Sus cambios de humor no son errores, son datos valiosos sobre cómo se siente en el mundo.`,
+    tip:'<strong>Práctica:</strong> Cuando ella esté en la tormenta, no intentes callarla ni resolverla. Tu trabajo es ser la orilla segura donde sus olas pueden llegar sin destruir nada.'
+  },
+  {
+    icon:'ti-shield-check',
+    iconBg:'#E8F0E4',
+    iconColor:'#3D6E3B',
+    title:'El Pilar Seguro',
+    subtitle:'Cómo estar presente en las tormentas hormonales',
+    body:`Durante la fase lútea, los niveles de progesterona y estrógeno caen, y esto afecta directamente los neurotransmisores del cerebro — incluyendo la serotonina y dopamina. No es debilidad de carácter ni capricho; es fisiología. Entender esto te convierte en un aliado, no en una víctima.
+
+<strong>Los cuatro errores más comunes:</strong>
+&#8226; Intentar "resolver" la emoción con lógica antes de validarla.
+&#8226; Tomarse el mal humor como un ataque personal.
+&#8226; Decir "estás exagerando" o "tranquílate" — ambas frases cierran la comunicación.
+&#8226; Desaparecer o alejarte justo cuando más necesita sentir tu presencia.
+
+<strong>Lo que sí funciona:</strong>
+&#8226; Preguntar "¿Qué necesitas de mí ahora mismo?" en lugar de asumir.
+&#8226; Contacto físico no verbal: una mano en la espalda, un abrazo sin agenda.
+&#8226; Escucha activa sin ofrecer soluciones a menos que ella las pida explícitamente.`,
+    tip:'<strong>Frase que cambia todo:</strong> "Te escucho. Estoy aquí. No tienes que explicarme nada." Repetida con calma, esta frase desarma la mayor parte de las tormentas.'
+  },
+  {
+    icon:'ti-messages',
+    iconBg:'#FEF6E8',
+    iconColor:'#A07830',
+    title:'Acciones de Valor',
+    subtitle:'Comunicación y lenguajes del amor por fase',
+    body:`Los cinco lenguajes del amor no tienen el mismo peso en todas las fases del ciclo. Aprende a hablar el idioma correcto en el momento correcto.
+
+<span class="honor-pill" style="background:#FFE4EC;color:#FF1493">&#127761; Menstruación</span> <strong>Actos de servicio</strong> y <strong>toque físico suave</strong>. Trae comida, cubre su espalda con una manta, pon la peli que ella elige. No hagas planes sin consultarla.
+
+<span class="honor-pill" style="background:#FCE6FA;color:#FF1493">&#127762; Fase Folicular</span> <strong>Tiempo de calidad</strong> y <strong>palabras de afirmación</strong>. Es el momento ideal para conversaciones profundas, proyectos en pareja y reconocer sus logros en voz alta.
+
+<span class="honor-pill" style="background:#FCE6FA;color:#FF1493">&#127765; Ovulación</span> <strong>Tiempo de calidad</strong> y <strong>conexión física</strong>. Su energía social está al máximo. Sorpresas, citas, planes nuevos. Ella está lista para recibir y dar afecto.
+
+<span class="honor-pill" style="background:#FFF8E1;color:#FF8F00">&#127766; Fase Lútea</span> <strong>Actos de servicio</strong> y <strong>presencia tranquila</strong>. Anticipa sus necesidades. Reduce el ruido de la casa. Sé el espacio de descanso que ella necesita.`,
+    tip:'<strong>Regla de oro:</strong> Antes de reaccionar a su emoción, pregúntate "¿Qué fase está atravesando ahora mismo?" Esa pregunta cambia tu perspectiva por completo.'
+  }
+];
+
+function renderHonorContent(){
+  const c=document.getElementById('honor-content');
+  c.innerHTML='';
+  honorData.forEach((item,i)=>{
+    c.innerHTML+=`<div class="honor-item">
+      <div class="honor-header" onclick="toggleHonor(${i})">
+        <div class="honor-icon" style="background:${item.iconBg}">
+          <i class="ti ${item.icon}" style="color:${item.iconColor}" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div class="honor-title">${item.title}</div>
+          <div style="font-size:.72rem;color:var(--c-muted);margin-top:.1rem">${item.subtitle}</div>
+        </div>
+        <i class="ti ti-chevron-down" id="honor-chev-${i}" style="color:var(--c-muted);transition:transform .2s;flex-shrink:0" aria-hidden="true"></i>
+      </div>
+      <div class="honor-body" id="honor-body-${i}">
+        <div style="white-space:pre-line;margin-bottom:.75rem">${item.body}</div>
+        <div class="honor-tip"><strong>&#128161; En práctica:</strong> ${item.tip}</div>
+      </div>
+    </div>`;
+  });
+}
+
+function toggleHonor(i){
+  const body=document.getElementById('honor-body-'+i);
+  const chev=document.getElementById('honor-chev-'+i);
+  const isOpen=body.classList.contains('open');
+  document.querySelectorAll('.honor-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('[id^=honor-chev]').forEach(c=>c.style.transform='');
+  if(!isOpen){body.classList.add('open');chev.style.transform='rotate(180deg)';}
+}
+
+function switchLearnTab(tab,el){
+  document.querySelectorAll('.learn-subtab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.learn-subpage').forEach(p=>p.classList.remove('active'));
+  document.getElementById('learn-tab-'+tab).classList.add('active');
+}
+
+function switchPagePollo(page,el){
+  document.querySelectorAll('#shell-pollo .page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+page).classList.add('active');
+  document.querySelectorAll('#shell-pollo .nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  if(page==='pollo-hist')renderSentList();
+}
+
+/* =============================================
+   AVATARES PERSONALIZADOS
+   ============================================= */
+function loadAvatars(){
+  const roles=['princesa','pollo'];
+  roles.forEach(role=>{
+    const saved=localStorage.getItem('avatar'+capitalize(role));
+    const container=document.getElementById('avatar-display-'+role);
+    const placeholder=document.getElementById('avatar-placeholder-'+role);
+    if(!container)return;
+    if(saved){
+      placeholder.style.display='none';
+      let img=container.querySelector('img');
+      if(!img){
+        img=document.createElement('img');
+        img.alt='Avatar';
+        container.insertBefore(img,container.querySelector('.avatar-overlay'));
+      }
+      img.src=saved;
+    }
+  });
+}
+
+function handleAvatarUpload(event,role){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(!file.type.startsWith('image/')){
+    showToast('Selecciona una imagen válida');
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const base64=e.target.result;
+    localStorage.setItem('avatar'+capitalize(role),base64);
+    const container=document.getElementById('avatar-display-'+role);
+    const placeholder=document.getElementById('avatar-placeholder-'+role);
+    if(!container)return;
+    placeholder.style.display='none';
+    let img=container.querySelector('img');
+    if(!img){
+      img=document.createElement('img');
+      img.alt='Avatar';
+      container.insertBefore(img,container.querySelector('.avatar-overlay'));
+    }
+    img.src=base64;
+    showToast('Foto actualizada &#10003;');
+  };
+  reader.onerror=function(){showToast('Error al procesar la imagen');};
+  reader.readAsDataURL(file);
+  event.target.value='';
+}
+
+function capitalize(str){return str.charAt(0).toUpperCase()+str.slice(1);}
+</script>
+</div>
+</body>
+</html>
