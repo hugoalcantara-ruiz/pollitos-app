@@ -789,7 +789,7 @@ const state={
   periodLen:5,
   previousPeriods:[null,null,null],
   logs:[
-    {date:new Date(new Date().setDate(new Date().getDate()-2)),flow:'Moderado',moods:['&#😢; Sensible'],physical:['Cólicos'],priv:false},
+    {date:new Date(new Date().setDate(new Date().getDate()-2)),flow:'Moderado',moods:['😢; Sensible'],physical:['Cólicos'],priv:false},
     {date:new Date(new Date().setDate(new Date().getDate()-1)),flow:'Ligero',moods:['😌 Tranquila'],physical:['Antojos'],priv:false},
     {date:new Date(),flow:'Ligero',moods:['😊 Feliz'],physical:[],priv:true},
   ],
@@ -853,8 +853,8 @@ function getCycleDay(){
 function getPhase(day){
   if(day<=state.periodLen)return{name:'Menstruación',cls:'menstrual',desc:'Tu cuerpo comienza el ciclo. Es normal sentir fatiga y cólicos leves. Descansa y cuídate.',emoji:'😴'};
   if(day<=13)return{name:'Fase Folicular',cls:'follicular',desc:'El estrógeno sube. Te sentirás con más energía y creatividad.',emoji:'😊'};
-  if(day<=16)return{name:'Ovulación',cls:'ovulation',desc:'Pico de estrógeno y LH. Fertilidad máxima. Te sentirás social y con mucha energía.',emoji:'&#128525;'};
-  return{name:'Fase Lútea',cls:'luteal',desc:'La progesterona domina. Puedes sentirte más introspectiva y sensible.',emoji:'&#128532;'};
+  if(day<=16)return{name:'Ovulación',cls:'ovulation',desc:'Pico de estrógeno y LH. Fertilidad máxima. Te sentirás social y con mucha energía.',emoji:'😍'};
+  return{name:'Fase Lútea',cls:'luteal',desc:'La progesterona domina. Puedes sentirte más introspectiva y sensible.',emoji:'😔'};
 }
 
 /* =============================================
